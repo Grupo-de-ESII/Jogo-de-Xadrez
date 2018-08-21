@@ -2,6 +2,8 @@ import Pawn, Rook, Knight, Bishop, Queen,King
 from abc import ABC,abstractmethod
 
 class Piece(ABC):
+	self.position=0
+	self.player=0
 	def __init__(self, name,position,player):
 		l={
 			'pawn' : Pawn,
