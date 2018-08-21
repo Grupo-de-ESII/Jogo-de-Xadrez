@@ -9,6 +9,8 @@ Mensagens em inglês, curtas, limitadas a colunas de 80 caracteres.
 descrição em inglês, simples, terminada com a mensagem "time elapsed : K" onde K é o tempo
 dispendido na tarefa que resultou naquele commit. K esta no formato "number(:number )?h"
 
+Tarefas triviais, tipo criar um arquivo(como eu fiz com Player.py) não tem tempo, certo?
+
 # Como submeter commits(TODO)
 EU não sei. Talvez commitemos e o commit tem de ser aprovado pela julia(juliaFalcao,
 team manager), ou acreditamos que cada um é responsavel e deixamos o commit livre, sem
