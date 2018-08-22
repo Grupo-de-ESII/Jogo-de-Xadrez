@@ -1,17 +1,16 @@
-# Jogo-de-Xadrez
-Jogo de xadrez feito para estudar tecnicas de engenharia de software para gerencia de projetos
+# Jogo de Xadrez
+Jogo de Xadrez feito para estudar técnicas de Engenharia de Software para gerenciamento de projetos.
 
-# Estilo de codigo(TODO)
+# Estilo de código (TODO)
 
 # Estilo de mensagem de commit
-Mensagens em inglês, curtas, limitadas a colunas de 80 caracteres.
+Mensagens em português, curtas e simples, de preferência até 50 caracteres (recomendação do GitHub).
 
-descrição em inglês, simples, terminada com a mensagem "time elapsed : K" onde K é o tempo
-dispendido na tarefa que resultou naquele commit. K esta no formato "number(:number )?h"
+# Como submeter commits
+A princípio, os commits serão livres, sem precisar de aprovação, mas para que isso funcione, por favor considerem o seguinte:
+- A prioridade é otimizar o tempo investido no trabalho. Merge conflicts e problemas de integração de funcionalidades trazem desperdício de tempo.
+- O meio mais simples de evitar isso é que todos tenham acesso ao código que os outros escreveram, sem atrasos, e programem suas partes de acordo com o estado atual do resto do repositório.
+- *Sempre* deem pull antes de começar a mexer no código.
+- *Sempre* deem commit e push nas alterações feitas, mesmo que estejam incompletas. Mesmo commits com poucas mudanças contribuem para manter o repositório atualizado.
 
-Tarefas triviais, tipo criar um arquivo(como eu fiz com Player.py) não tem tempo, certo?
-
-# Como submeter commits(TODO)
-EU não sei. Talvez commitemos e o commit tem de ser aprovado pela julia(juliaFalcao,
-team manager), ou acreditamos que cada um é responsavel e deixamos o commit livre, sem
-necessidade de aprovação.
+A decidir: criação de branches
