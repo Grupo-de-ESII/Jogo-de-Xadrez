@@ -9,7 +9,7 @@ import Peca
 
 
 class Tabuleiro():
-	Pecas: List[List[Peca]] = [[0 for j in range(8)] for i in range(8)]
+	Pecas: List[List[Peca]] = [[None for j in range(8)] for i in range(8)]
 	def __init__(self,player1: Jogador, player2: Jogador):
 
 
@@ -23,6 +23,13 @@ class Tabuleiro():
 			pieces[i][6] = Peca('pawn', Position(indexFromColumn(i),7), player2)
 			pieces[i][7] = Peca(pieceFromIndex(i), Position(indexFromColumn(i) , 8), player2)
 
+	def possiveisMovimentos():
+		l=[]
+		for i in range(8):
+			for j in range(8):
+				if (Pecas[i][j] != None):
+					l = l + Pecas[i][j].possiveisMovimentos()
+		return l
 
 	#private methods, don't call
 	#thanks to python by don't have private methods
