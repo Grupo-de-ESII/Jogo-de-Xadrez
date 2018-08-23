@@ -6,7 +6,7 @@ class Peca(ABC):
 	self.jogador=0
 	def __init__(self, nome,posicao,jogador):
 		l={
-			'peao' : peao,
+			'peao' : Peao,
 			'torre' : Torre,
 			'cavalo' : Cavalo,
 			'bispo' : Bispo,
@@ -21,5 +21,9 @@ class Peca(ABC):
 	@abstractmethod
 	def mover(self,posicao):
 		pass
+	@abstractmethod
+	def tipo():
+		pass
+		
 	
 
