@@ -1,6 +1,6 @@
 import pytest
 
-import Tabuleiro
+import Jogo-de-Xadrez.Tabuleiro
 
 def test_configuracao_inicial():
 	t=Tabuleiro()
@@ -30,5 +30,5 @@ def test_configuracao_inicial():
 	for i in ['a','b','c','d','e','f','g','h']:
 		assert t.pecaNaPosicao(i + '7').tipo() == 'peao'
 
-def test_movimentacao_peao():
+#def test_movimentacao_peao():
 	
