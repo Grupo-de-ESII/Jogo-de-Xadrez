@@ -1,6 +1,6 @@
 import pytest
 
-import Jogo-de-Xadrez.Tabuleiro
+from ..Tabuleiro import *
 
 def test_configuracao_inicial():
 	t=Tabuleiro()

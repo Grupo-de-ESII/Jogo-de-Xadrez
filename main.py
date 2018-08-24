@@ -1,4 +1,4 @@
-import Board,Player
+import Tabuleiro,Jogador
 
 
 
