@@ -10,8 +10,9 @@ class Peao(Peca):
 
 	def movimentosPossiveis(self,tabuleiro):
 		l=[]
-		(x,y) = posicao
 		if(primeiromovimento):
-			if(tabuleiro[x][y+1] == None && tabuleiro[x][y+2] == None):
-				l = l + []
+			minhaPosicao = Posicao(posicao)
+			umaLinhaAcima=minhaPosicao.umaLinhaAcima()
+			if(tabuleiro.pecaNaPosicao(umaLinhaAcima) == None && tabuleiro.pecaNaPosicao(umaLinhaAcima.umaLinhaAcima()) == None):
+				l = l + [Jogada(self,)]
 			
