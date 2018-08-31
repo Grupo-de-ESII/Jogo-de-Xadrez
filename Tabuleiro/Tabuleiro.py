@@ -16,12 +16,12 @@ class Tabuleiro():
 
 		#pawn
 		for i in range(8):
-			Pecas[i][1] = Peca('pawn', Position(indexFromColumn(i),2), player1)
-			Pecas[i][0] = Peca(pieceFromIndex(i), Position(indexFromColumn(i) , 1), player1)
+			Pecas[i][1] = Peca('pawn', player1)
+			Pecas[i][0] = Peca(pieceFromIndex(i), player1)
 
 		for i in range(8):
-			pieces[i][6] = Peca('pawn', Position(indexFromColumn(i),7), player2)
-			pieces[i][7] = Peca(pieceFromIndex(i), Position(indexFromColumn(i) , 8), player2)
+			pieces[i][6] = Peca('pawn', player2)
+			pieces[i][7] = Peca(pieceFromIndex(i), player2)
 
 	def possiveisMovimentos():
 		l=[]
