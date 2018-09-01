@@ -9,7 +9,7 @@ import Peca
 
 
 class Tabuleiro():
-	Pecas: List[List[Peca]] = [[None for j in range(8)] for i in range(8)]
+	pecas: List[List[Peca]] = [[None for j in range(8)] for i in range(8)]
 	def __init__(self,player1: Jogador, player2: Jogador):
 
 
@@ -30,7 +30,11 @@ class Tabuleiro():
 				if (Pecas[i][j] != None):
 					l = l + Pecas[i][j].possiveisMovimentos()
 		return l
-
+	def tipoPecaNaPosicao(self,posicao):
+		(x,y)=posicao
+		if pecas[x][y] != None:
+			return pecas[x][y].tipo()
+		return ''
 	#private methods, don't call
 	#thanks to python by don't have private methods
 
