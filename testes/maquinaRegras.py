@@ -3,32 +3,30 @@ import pytest
 from ..Tabuleiro import *
 
 def test_configuracao_inicial():
-	t=Tabuleiro()
+	t=Tabuleiro(None,None)
 	#brancas
-	assert t.pecaNaPosicao('a1').tipo() == 'torre'
-	assert t.pecaNaPosicao('h1').tipo() == 'torre'
-	assert t.pecaNaPosicao('b1').tipo() == 'cavalo'
-	assert t.pecaNaPosicao('g1').tipo() == 'cavalo'
-	assert t.pecaNaPosicao('c1').tipo() == 'bispo'
-	assert t.pecaNaPosicao('f1').tipo() == 'bispo'
-	assert t.pecaNaPosicao('d1').tipo() == 'rainha'
-	assert t.pecaNaPosicao('e1').tipo() == 'rei'
+	assert t.tipoPecaNaPosicao((0,0)) == 'torre'
+	assert t.tipoPecaNaPosicao((7,0)) == 'torre'
+	assert t.tipoPecaNaPosicao((1,0)) == 'cavalo'
+	assert t.tipoPecaNaPosicao((6,0)) == 'cavalo'
+	assert t.tipoPecaNaPosicao((2,0)) == 'bispo'
+	assert t.tipoPecaNaPosicao((5,0)) == 'bispo'
+	assert t.tipoPecaNaPosicao((3,0)) == 'rainha'
+	assert t.tipoPecaNaPosicao((4,0)) == 'rei'
 	
-	for i in ['a','b','c','d','e','f','g','h']:
-		assert t.pecaNaPosicao(i + '2').tipo()=='peao'
+	for i in [0,1,2,3,4,5,6,7]:
+		assert t.tipoPecaNaPosicao((i,1))=='peao'
 	#pretas
-
-	assert t.pecaNaPosicao('a8').tipo() == 'torre'
-	assert t.pecaNaPosicao('h8').tipo() == 'torre'
-	assert t.pecaNaPosicao('b8').tipo() == 'cavalo'
-	assert t.pecaNaPosicao('g8').tipo() == 'cavalo'
-	assert t.pecaNaPosicao('c8').tipo() == 'bispo'
-	assert t.pecaNaPosicao('f8').tipo() == 'bispo'
-	assert t.pecaNaPosicao('d8').tipo() == 'rainha'
-	assert t.pecaNaPosicao('e8').tipo() == 'rei'
-
-	for i in ['a','b','c','d','e','f','g','h']:
-		assert t.pecaNaPosicao(i + '7').tipo() == 'peao'
+	assert t.tipoPecaNaPosicao((0,7)) == 'torre'
+	assert t.tipoPecaNaPosicao((7,7)) == 'torre'
+	assert t.tipoPecaNaPosicao((1,7)) == 'cavalo'
+	assert t.tipoPecaNaPosicao((6,7)) == 'cavalo'
+	assert t.tipoPecaNaPosicao((2,7)) == 'bispo'
+	assert t.tipoPecaNaPosicao((5,7)) == 'bispo'
+	assert t.tipoPecaNaPosicao((3,7)) == 'rainha'
+	assert t.tipoPecaNaPosicao((4,7)) == 'rei'
+	for i in [0,1,2,3,4,5,6,7]:
+		assert t.tipoPecaNaPosicao((i , 6)) == 'peao'
 
 #def test_movimentacao_peao():
 	
