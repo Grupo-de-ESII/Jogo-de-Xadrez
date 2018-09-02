@@ -14,7 +14,7 @@ class Peca(ABC):
 		return l[nome](jogador)
 	
 	@abstractmethod
-	def movimentosPossiveis(self,tabuleiro):
+	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
 	@abstractmethod
