@@ -2,7 +2,6 @@ import Peao, Torre, Cavalo, Bispo, Rainha, Rei
 from abc import ABC,abstractmethod
 
 class Peca(ABC):
-	self.posicao=0
 	self.jogador=0
 	def __init__(self, nome,posicao,jogador):
 		l={
