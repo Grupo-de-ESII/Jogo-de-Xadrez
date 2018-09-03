@@ -1,16 +1,12 @@
 #This file declares the Board Class, that contain the Pieces
 #and is a high-level interface to the user use the piece
 
-from typing import *
 
-import Peca
-
-
-
+from ..Peca import Peca
 
 class Tabuleiro():
-	pecas: List[List[Peca]] = [[None for j in range(8)] for i in range(8)]
-	def __init__(self,player1: Jogador, player2: Jogador):
+	pecas = [[None for j in range(8)] for i in range(8)]
+	def __init__(self,player1, player2):
 
 
 
@@ -46,5 +42,5 @@ class Tabuleiro():
 		return chr(i+ord('a'))
 
 	def __pieceFromIndex(self,i):
-		l: List[str]=['tower','knight','bishop','queen','king','bishop','knight','rook']
+		l=['tower','knight','bishop','queen','king','bishop','knight','rook']
 		return l[i]

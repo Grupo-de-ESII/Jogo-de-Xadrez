@@ -1,0 +1,5 @@
+{
+  "maquinaRegras.py": true,
+  "maquinaRegras.py::test_configuracao_inicial": true,
+  "testes/maquinaRegras.py": true
+}
