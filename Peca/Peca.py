@@ -3,7 +3,7 @@ from abc import ABC,abstractmethod
 
 class Peca(ABC):
 	self.jogador=0
-	def __init__(self, nome,posicao,jogador):
+	def __init__(self, nome,jogador):
 		l={
 			'peao' : Peao,
 			'torre' : Torre,
@@ -11,15 +11,12 @@ class Peca(ABC):
 			'bispo' : Bispo,
 			'rainha' : Rainha,
 			'rei' : Rei}
-		return l[nome](posicao,jogador)
+		return l[nome](jogador)
 	
 	@abstractmethod
-	def movimentosPossiveis(self,tabuleiro):
+	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
-	@abstractmethod
-	def mover(self,posicao):
-		pass
 	@abstractmethod
 	def tipo():
 		pass
