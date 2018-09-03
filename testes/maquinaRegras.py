@@ -1,6 +1,6 @@
 import pytest
 
-import Tabuleiro.Tabuleiro
+from ..Tabuleiro import Tabuleiro
 def test_configuracao_inicial():
 	t=Tabuleiro(None,None)
 	#brancas
