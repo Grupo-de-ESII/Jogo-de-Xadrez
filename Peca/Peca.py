@@ -9,9 +9,9 @@ class Bispo(Peca):
       #se movendo em direção ao canto superior direito na visão das brancas
       if (x+i)>7 or (y+i)>7:
         break;
-      if not tabuleiro.temPecaNaPosicao((x+i,y+i)):
+      if (not tabuleiro.temPecaNaPosicao((x+i,y+i))):
         l.append([['bispo',posicao,(x+i,y+i)]])
-      elif tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
+      elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
         l.append([['bispo',posicao,(x+i,y+i)]])
         
     
