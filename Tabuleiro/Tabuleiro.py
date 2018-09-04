@@ -35,6 +35,9 @@ class Tabuleiro():
 	def temPecaNaPosicao(self,posicao):
 		(x,y)=posicao
 		return x>=0 and x<= 7 and y>=0 and y<=7 and pecas[x][y]!=None
+
+	def avalia(self,heuristica):
+		return heuristica(pecas)
 	#private methods, don't call
 	#thanks to python by don't have private methods
 
