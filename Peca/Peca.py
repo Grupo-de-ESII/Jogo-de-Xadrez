@@ -1,3 +1,25 @@
+from abc import ABC,abstractmethod
+
+class Peca(ABC):
+	self.jogador=0
+	def __init__(self, nome,jogador):
+		l={
+			'peao' : Peao,
+			'torre' : Torre,
+			'cavalo' : Cavalo,
+			'bispo' : Bispo,
+			'rainha' : Rainha,
+			'rei' : Rei}
+		return l[nome](jogador)
+	
+	@abstractmethod
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		pass
+
+	@abstractmethod
+	def tipo():
+		pass
+
 class Bispo(Peca):
   def __init__(self,jogador):
     self.jogador=jogador
@@ -13,7 +35,41 @@ class Bispo(Peca):
         l.append([['bispo',posicao,(x+i,y+i)]])
       elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
         l.append([['bispo',posicao,(x+i,y+i)]])
-        
+      else:
+	break
+	
+    for i in [1,2,3,4,5,6,7]:
+      #se movendo em direção ao canto inferior esquerdo na visão das brancas
+      if (x-i)<0 or (y-i)<0:
+        break;
+      if (not tabuleiro.temPecaNaPosicao((x-i,y-i))):
+        l.append([['bispo',posicao,(x-i,y-i)]])
+      elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=jogador):
+        l.append([['bispo',posicao,(x-i,y-i)]])
+      else:
+	break
+	
+    for i in [1,2,3,4,5,6,7]:
+      #se movendo em direção ao canto inferior direito na visão das brancas
+      if (x+i)<0 or (y-i)<0:
+        break;
+      if (not tabuleiro.temPecaNaPosicao((x+i,y-i))):
+        l.append([['bispo',posicao,(x+i,y-i)]])
+      elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=jogador):
+        l.append([['bispo',posicao,(x+i,y-i)]])
+      else:
+	break
+
+    for i in [1,2,3,4,5,6,7]:
+      #se movendo em direção ao canto superior esquerdo na visão das brancas
+      if (x-i)<0 or (y+i)<0:
+        break;
+      if (not tabuleiro.temPecaNaPosicao((x-i,y+i))):
+        l.append([['bispo',posicao,(x-i,y+i)]])
+      elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=jogador):
+        l.append([['bispo',posicao,(x-i,y+i)]])
+      else:
+	break
     
     return l
       
@@ -54,27 +110,7 @@ class Peao(Peca):
 	def tipo(self):
 		return 'peao'
 			
-from abc import ABC,abstractmethod
 
-class Peca(ABC):
-	self.jogador=0
-	def __init__(self, nome,jogador):
-		l={
-			'peao' : Peao,
-			'torre' : Torre,
-			'cavalo' : Cavalo,
-			'bispo' : Bispo,
-			'rainha' : Rainha,
-			'rei' : Rei}
-		return l[nome](jogador)
-	
-	@abstractmethod
-	def movimentosPossiveis(self,posicao,tabuleiro):
-		pass
-
-	@abstractmethod
-	def tipo():
-		pass
 		
 	
 
