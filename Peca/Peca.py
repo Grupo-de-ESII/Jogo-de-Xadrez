@@ -20,6 +20,30 @@ class Peca(ABC):
 	def tipo():
 		pass
 
+class Rei(Peca):
+	self.jaMeMovi = False
+	def __init__(self,posicao,jogador):
+		self.jogador=jogador
+
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		l=[]
+		(x,y)=posicao
+		inc=[(0,1),(0,-1),(1,0),(1,1),(1,-1),(-1,0),(-1,1),(-1,-1)]
+		for(i in inc):
+			(incx,incy)=i
+			if(x+incx>7 or x+incx<0 or y+incy>7 or y+incy<0):
+				continue
+			if (not tabuleiro.temPecaNaPosicao((x+incx,y+incy))):
+        			l.append([['rei',posicao,(x+i,y+i)]])
+      			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=jogador):
+        			l.append([['peao',posicao,(x+incx,y+incy)]])
+		return l
+			
+	
+	
+	def tipo(self):
+		return 'rei'
+			
 class Bispo(Peca):
   def __init__(self,jogador):
     self.jogador=jogador
@@ -79,7 +103,7 @@ class Bispo(Peca):
     return 'bispo'
 
 class Peao(Peca):
-	self.primeiroMovimento:bool = False
+	self.primeiroMovimento = False
 	def __init__(self,posicao,jogador):
 		self.jogador=jogador
 
