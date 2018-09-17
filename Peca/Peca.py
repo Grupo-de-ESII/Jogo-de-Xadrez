@@ -1,7 +1,6 @@
-from abc import ABC,abstractmethod
 
-class Peca(ABC):
-	self.jogador=0
+class Peca():
+	jogador=None
 	def __init__(self, nome,jogador):
 		l={
 			'peao' : Peao,
@@ -12,31 +11,103 @@ class Peca(ABC):
 			'rei' : Rei}
 		return l[nome](jogador)
 	
-	@abstractmethod
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
-	@abstractmethod
 	def tipo():
 		pass
 
+class Torre(Peca):
+	def __init__(self,jogador):
+		self.jogador=jogador
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		l=[]
+		(x,y)=posicao
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção a direita
+			if (x+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y))):
+				l.append([['torre',posicao,(x+i,y)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y))!=jogador):
+				l.append([['torre',posicao,(x+i,y)]])
+			else:
+				break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção a esquerda
+			if (x-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y))):
+				l.append([['torre',posicao,(x-i,y)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y))!=jogador):
+				l.append([['torre',posicao,(x-i,y)]])
+			else:
+				break
+	
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo para baixo
+			if (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x,y-i))):
+				l.append([['torre',posicao,(x,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x,y-i))!=jogador):
+				l.append([['torre',posicao,(x,y-i)]])
+			else:
+				break
+
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo para cima
+			if (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x,y+i))):
+				 l.append([['torre',posicao,(x,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x,y+i))!=jogador):
+				l.append([['torre',posicao,(x,y+i)]])
+			else:
+				break
+		return l
+	def tipo(self):
+		return 'torre'
+
+
+class Cavalo(Peca):
+	def __init__(self,jogador):
+		self.jogador=jogador
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		l=[]
+		(x,y)=posicao
+		inc=[(2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2)]
+		for i in inc:
+			(incx,incy)=i
+			if(x+incx>7 or x+incx<0 or y+incy>7 or y+incy<0):
+				continue
+			if (not tabuleiro.temPecaNaPosicao((x+incx,y+incy))):
+        			l.append([['cavalo',posicao,(x+i,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=jogador):
+        			l.append([['cavalo',posicao,(x+incx,y+incy)]])
+		return l
+	def tipo(self):
+		return 'cavalo'
+
+		
+
 class Rei(Peca):
-	self.jaMeMovi = False
-	def __init__(self,posicao,jogador):
+	jaMeMovi = False
+	def __init__(self,jogador):
 		self.jogador=jogador
 
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		l=[]
 		(x,y)=posicao
 		inc=[(0,1),(0,-1),(1,0),(1,1),(1,-1),(-1,0),(-1,1),(-1,-1)]
-		for(i in inc):
+		for i in inc:
 			(incx,incy)=i
 			if(x+incx>7 or x+incx<0 or y+incy>7 or y+incy<0):
 				continue
 			if (not tabuleiro.temPecaNaPosicao((x+incx,y+incy))):
         			l.append([['rei',posicao,(x+i,y+i)]])
-      			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=jogador):
-        			l.append([['peao',posicao,(x+incx,y+incy)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=jogador):
+        			l.append([['rei',posicao,(x+incx,y+incy)]])
 		return l
 			
 	
@@ -45,66 +116,64 @@ class Rei(Peca):
 		return 'rei'
 			
 class Bispo(Peca):
-  def __init__(self,jogador):
-    self.jogador=jogador
+	def __init__(self,jogador):
+		self.jogador=jogador
     
-  def movimentosPossiveis(self,posicao,tabuleiro):
-    l=[]
-    (x,y)=posicao
-    for i in [1,2,3,4,5,6,7]:
-      #se movendo em direção ao canto superior direito na visão das brancas
-      if (x+i)>7 or (y+i)>7:
-        break;
-      if (not tabuleiro.temPecaNaPosicao((x+i,y+i))):
-        l.append([['bispo',posicao,(x+i,y+i)]])
-      elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
-        l.append([['bispo',posicao,(x+i,y+i)]])
-      else:
-	break
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		l=[]
+		(x,y)=posicao
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto superior direito na visão das brancas
+			if (x+i)>7 or (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y+i))):
+				l.append([['bispo',posicao,(x+i,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
+				l.append([['bispo',posicao,(x+i,y+i)]])
+			else:
+				break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto inferior esquerdo na visão das brancas
+			if (x-i)<0 or (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y-i))):
+				l.append([['bispo',posicao,(x-i,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=jogador):
+				l.append([['bispo',posicao,(x-i,y-i)]])
+			else:
+				break
 	
-    for i in [1,2,3,4,5,6,7]:
-      #se movendo em direção ao canto inferior esquerdo na visão das brancas
-      if (x-i)<0 or (y-i)<0:
-        break;
-      if (not tabuleiro.temPecaNaPosicao((x-i,y-i))):
-        l.append([['bispo',posicao,(x-i,y-i)]])
-      elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=jogador):
-        l.append([['bispo',posicao,(x-i,y-i)]])
-      else:
-	break
-	
-    for i in [1,2,3,4,5,6,7]:
-      #se movendo em direção ao canto inferior direito na visão das brancas
-      if (x+i)<0 or (y-i)<0:
-        break;
-      if (not tabuleiro.temPecaNaPosicao((x+i,y-i))):
-        l.append([['bispo',posicao,(x+i,y-i)]])
-      elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=jogador):
-        l.append([['bispo',posicao,(x+i,y-i)]])
-      else:
-	break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto inferior direito na visão das brancas
+			if (x+i)>7 or (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y-i))):
+				l.append([['bispo',posicao,(x+i,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=jogador):
+				l.append([['bispo',posicao,(x+i,y-i)]])
+			else:
+				break
 
-    for i in [1,2,3,4,5,6,7]:
-      #se movendo em direção ao canto superior esquerdo na visão das brancas
-      if (x-i)<0 or (y+i)<0:
-        break;
-      if (not tabuleiro.temPecaNaPosicao((x-i,y+i))):
-        l.append([['bispo',posicao,(x-i,y+i)]])
-      elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=jogador):
-        l.append([['bispo',posicao,(x-i,y+i)]])
-      else:
-	break
-    
-    return l
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto superior esquerdo na visão das brancas
+			if (x-i)<0 or (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y+i))):
+				 l.append([['bispo',posicao,(x-i,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=jogador):
+				l.append([['bispo',posicao,(x-i,y+i)]])
+			else:
+				break
+		return l
       
         
   
-  def tipo(self):
-    return 'bispo'
+	def tipo(self):
+		return 'bispo'
 
 class Peao(Peca):
-	self.primeiroMovimento = False
-	def __init__(self,posicao,jogador):
+	primeiroMovimento = False
+	def __init__(self,jogador):
 		self.jogador=jogador
 
 	def movimentosPossiveis(self,posicao,tabuleiro):
