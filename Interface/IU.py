@@ -77,23 +77,72 @@ class reiBranco(object):
         pecasBrancas.append(self)
 ##########################################################################
 
+# info
+LARGURA = 900
+ALTURA = 600
+L = ALTURA // 10  # Unidadade mínima da tela, L = lado de um quadrado do tabuleiro
+
+# Cores
+BRANCO = [255,255,255]
+CINZA = [100, 100, 100] # [139,69,19]
+AMARELO = [255,255,0]
+
+#auxiliares
+def desenha_tabuleiro(tela):
+    # Definido imagem de fundo da interface
+    img = pygame.image.load("Ativos/tabuleiromadeira.png")
+    tela.blit(img, (0, 0))
+
+    # Pinta tabuleiro
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (i % 2 != 0):
+                if (j % 2 == 0):
+                    pygame.draw.rect(tela, CINZA,
+                                     [i * L + 3 * L, j * L + L, L, L])  # [POS_X, POS_Y, LARGURA, ALTURA]
+                else:
+                    pygame.draw.rect(tela, BRANCO,
+                                     [i * L + 3 * L, j * L + L, L, L])  # [POS_X, POS_Y, LARGURA, ALTURA]
+            else:
+                if (j % 2 == 0):
+                    pygame.draw.rect(tela, BRANCO,
+                                     [i * L + 3 * L, j * L + L, L, L])  # [POS_X, POS_Y, LARGURA, ALTURA]
+                else:
+                    pygame.draw.rect(tela, CINZA,
+                                     [i * L + 3 * L, j * L + L, L, L])  # [POS_X, POS_Y, LARGURA, ALTURA]
+
+    # Pinta dois quadrados amarelos do lado do tabuleiro
+    pygame.draw.rect(tela, AMARELO, [L // 2, L, 2 * L, 8 * L])
+    pygame.draw.rect(tela, AMARELO, [11 * L + (L // 2), L, 2 * L, 8 * L])
+
+    # COLOCA PECAS NA TELA
+    for peca in pecasBrancas:
+        tela.blit(peca.imagem, peca.rect)
+    for peca in pecasPretas:
+        tela.blit(peca.imagem, peca.rect)
+
+    pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
+    pygame.display.update() # atualiza a tela com tudo que foi feito
+
+def moverPeca(tela, peca, posicao):
+    pos_x = peca.rect.x
+    pos_y = peca.rect.y
+    if(pos_x < posicao[0]):
+        if(pos_y < posicao[1]):
+            while(pos_x < posicao[0]):
+                pos_x += 6
+                pos_y += 6
+                peca.rect.move_ip(6,6)
+                desenha_tabuleiro(tela)
+
+##########################################################################
+
+#função principal
+
 def interface():
     pygame.init()
-
-    # Cores
-    BRANCO = [255,255,255]
-    CINZA = [100, 100, 100] # [139,69,19]
-    AMARELO = [255,255,0]
-
-    # info = pygame.display.Info() # cria objeto do Info com atributos da tela
-    LARGURA = 900
-    ALTURA = 600
-    L = ALTURA // 10  # Unidadade mínima da tela, L = lado de um quadrado do tabuleiro
-
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
-    #Pinta tela
-    #tela.fill([255,255,255])
 
     #negolossauroRex
     dic = {
@@ -114,35 +163,6 @@ def interface():
         "A1": [3*L, 8*L], "B1": [4*L, 8*L], "C1": [5*L, 8*L], "D1": [6*L, 8*L],
         "E1": [7*L, 8*L], "F1": [8*L, 8*L], "G1": [9*L, 8*L], "H1": [10*L, 8*L],
     }
-
-    # Definido imagem de fundo da interface
-    img = pygame.image.load("Ativos/tabuleiromadeira.png")
-    tela.blit(img,(0,0))
-
-    # Pinta tabuleiro
-    for i in range(0,8):
-        for j in range(0,8):
-            if(i%2!=0):
-                if(j%2==0):
-                    pygame.draw.rect(tela, CINZA,
-                                     [i * L + 3 * L, j * L + L, L, L]) #[POS_X, POS_Y, LARGURA, ALTURA]
-                else:
-                    pygame.draw.rect(tela, BRANCO,
-                                     [i * L + 3 * L, j * L + L, L, L]) #[POS_X, POS_Y, LARGURA, ALTURA]
-            else:
-                if (j % 2 == 0):
-                    pygame.draw.rect(tela, BRANCO,
-                                     [i * L + 3 * L, j * L + L, L, L]) #[POS_X, POS_Y, LARGURA, ALTURA]
-                else:
-                    pygame.draw.rect(tela, CINZA,
-                                     [i * L + 3 * L, j * L + L, L, L]) #[POS_X, POS_Y, LARGURA, ALTURA]
-
-    # Pinta o lado do tabuleiro de branco
-    #pygame.draw.rect(tela, BRANCO, [10 * L, 0, LARGURA - (L * 10), LARGURA])
-
-    # Pinta dois quadrados amarelos do lado do tabuleiro
-    pygame.draw.rect(tela, AMARELO, [ L//2, L, 2 * L, 8 * L])
-    pygame.draw.rect(tela, AMARELO, [ 11 * L + (L//2), L, 2 * L, 8 * L])
 
     #CRIA OBJETOS DAS PEÇAS
     peaoPreto(dic["A7"], L)
@@ -178,19 +198,16 @@ def interface():
     reiBranco(dic["D1"], L)
     rainhaBranco(dic["E1"], L)
 
-    #minhafonte = pygame.font.SysFont('Comic Sans MS', 30)
-    #COLOCA PECAS NA TELA
-    for peca in pecasBrancas:
-        tela.blit(peca.imagem, peca.rect)
-    for peca in pecasPretas:
-        tela.blit(peca.imagem, peca.rect)
+    desenha_tabuleiro(tela)
 
-    pygame.display.flip() #Por algum motivo isso é necessário quando se usa um draw no pygame
-    pygame.display.update()
     running = True
     while running:
 
         key = pygame.key.get_pressed()
+        if key[pygame.K_c]:
+            moverPeca(tela, pecasPretas[0], dic["E3"])
+
+
         if key[pygame.K_ESCAPE]:
             running = False
 
