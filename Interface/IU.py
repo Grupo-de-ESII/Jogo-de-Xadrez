@@ -88,6 +88,45 @@ CINZA = [100, 100, 100] # [139,69,19]
 AMARELO = [255,255,0]
 
 #auxiliares
+def desenha_menu1(tela):
+    # Definido imagem de fundo da interface
+    img = pygame.image.load("Ativos/menu_tela1.jpg")
+    tela.blit(img, (0, 0))
+
+    pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
+    pygame.display.update() # atualiza a tela com tudo que foi feito
+
+#FUNÇÃO DESENHA_MENU2 PRECISA SER ORGANIZADAAAAAAA
+def desenha_menu2(tela):
+    # Definido imagem de fundo da interface
+    img = pygame.image.load("Ativos/menu_tela2.jpg")
+    tela.blit(img, (0, 0))
+    pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
+    pygame.display.update() # atualiza a tela com tudo que foi feito
+    pygame.time.delay(3000)
+    fontezinha = pygame.font.Font("Ativos/Crackvetica.ttf", 60)
+    textSurfaceObj = fontezinha.render('Jogar', True, (240, 240, 240), (115, 117, 117))
+    textRectObj = textSurfaceObj.get_rect()
+    textRectObj.center = (390, 240)
+    tela.blit(textSurfaceObj, textRectObj)
+    pygame.display.update()
+
+#função da tela inicial -> efeito de eletricidade
+def eletricidade(largura, altura, tela):
+    eletricidade = pygame.Surface((largura, altura))
+    eletricidade.fill((255,255,255))
+    pygame.mixer.music.load("Ativos/electricshock.mp3")
+    pygame.mixer.music.play(-1)
+    for alpha in range(0, 300):
+        eletricidade.set_alpha(alpha)
+        desenha_menu1(tela)
+        tela.blit(eletricidade, (0,0))
+        pygame.display.update()
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load("Ativos/thunder2.mp3")
+    pygame.mixer.music.play(0)
+    desenha_menu2(tela)
+
 def desenha_tabuleiro(tela):
     # Definido imagem de fundo da interface
     img = pygame.image.load("Ativos/tabuleiromadeira.png")
@@ -127,14 +166,15 @@ def desenha_tabuleiro(tela):
 def moverPeca(tela, peca, posicao):
     pos_x = peca.rect.x
     pos_y = peca.rect.y
+    passo = 6
     if(pos_x < posicao[0]):
         if(pos_y < posicao[1]):
             while(pos_x < posicao[0]):
-                pos_x += 6
-                pos_y += 6
-                peca.rect.move_ip(6,6)
+                pos_x += passo
+                pos_y += passo
+                peca.rect.x = pos_x
+                peca.rect.y = pos_y
                 desenha_tabuleiro(tela)
-
 ##########################################################################
 
 #função principal
@@ -198,22 +238,23 @@ def interface():
     reiBranco(dic["D1"], L)
     rainhaBranco(dic["E1"], L)
 
-    desenha_tabuleiro(tela)
+    estado = 0
+    desenha_menu1(tela)
 
     running = True
     while running:
-
         key = pygame.key.get_pressed()
         if key[pygame.K_c]:
             moverPeca(tela, pecasPretas[0], dic["E3"])
-
-
         if key[pygame.K_ESCAPE]:
             running = False
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if estado == 0:
+                if event.type == pygame.KEYDOWN:
+                    eletricidade(LARGURA, ALTURA, tela)
+                    estado += 1
     pygame.display.quit()
     pygame.quit()
 
