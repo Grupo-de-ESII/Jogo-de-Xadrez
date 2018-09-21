@@ -97,19 +97,44 @@ def desenha_menu1(tela):
     pygame.display.update() # atualiza a tela com tudo que foi feito
 
 #FUNÇÃO DESENHA_MENU2 PRECISA SER ORGANIZADAAAAAAA
-def desenha_menu2(tela):
+def desenha_menu2(tela, estado):
     # Definido imagem de fundo da interface
+    cor_texto = (255, 69, 0) #Cinza quase Branco
+    cor_fundo = None #(115, 117, 117) #Cor estranha
     img = pygame.image.load("Ativos/menu_tela2.jpg")
     tela.blit(img, (0, 0))
     pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
     pygame.display.update() # atualiza a tela com tudo que foi feito
-    pygame.time.delay(3000)
-    fontezinha = pygame.font.Font("Ativos/Crackvetica.ttf", 60)
-    textSurfaceObj = fontezinha.render('Jogar', True, (240, 240, 240), (115, 117, 117))
-    textRectObj = textSurfaceObj.get_rect()
-    textRectObj.center = (390, 240)
-    tela.blit(textSurfaceObj, textRectObj)
+    fonte_texto = pygame.font.Font("Ativos/Crackvetica.ttf", 60)
+    if estado == 1:
+        pygame.time.delay(3000)
+        texto_jogar = fonte_texto.render('Jogar', True, cor_texto, cor_fundo)
+        texto_opcoes = fonte_texto.render('Opcoes', True, cor_texto, cor_fundo)
+        texto_sair = fonte_texto.render('Sair', True, cor_texto, cor_fundo)
+        rect_jogar = texto_jogar.get_rect()
+        rect_opcoes = texto_opcoes.get_rect()
+        rect_sair = texto_sair.get_rect()
+        rect_jogar.center = (450, 200)
+        rect_opcoes.center = (450, 284)
+        rect_sair.center = (450, 368)
+        tela.blit(texto_jogar, rect_jogar)
+        tela.blit(texto_opcoes, rect_opcoes)
+        tela.blit(texto_sair, rect_sair)
+    elif estado == 2:
+        texto_jogar = fonte_texto.render('Jogar', True, cor_texto, cor_fundo)
+        texto_opcoes = fonte_texto.render('Opcoes', True, cor_texto, cor_fundo)
+        texto_sair = fonte_texto.render('Sair', True, cor_texto, cor_fundo)
+        rect_jogar = texto_jogar.get_rect()
+        rect_opcoes = texto_opcoes.get_rect()
+        rect_sair = texto_sair.get_rect()
+        rect_jogar.center = (450, 200)
+        rect_opcoes.center = (450, 284)
+        rect_sair.center = (450, 368)
+        tela.blit(texto_jogar, rect_jogar)
+        tela.blit(texto_opcoes, rect_opcoes)
+        tela.blit(texto_sair, rect_sair)
     pygame.display.update()
+    #jogar = [239, 64] opcoes = [189, 64] sair = [159, 64]
 
 #função da tela inicial -> efeito de eletricidade
 def eletricidade(largura, altura, tela):
@@ -125,7 +150,7 @@ def eletricidade(largura, altura, tela):
     pygame.mixer.music.stop()
     pygame.mixer.music.load("Ativos/thunder2.mp3")
     pygame.mixer.music.play(0)
-    desenha_menu2(tela)
+    desenha_menu2(tela, 1)
 
 def desenha_tabuleiro(tela):
     # Definido imagem de fundo da interface
@@ -244,8 +269,9 @@ def interface():
     running = True
     while running:
         key = pygame.key.get_pressed()
-        if key[pygame.K_c]:
-            moverPeca(tela, pecasPretas[0], dic["E3"])
+        if estado == 4:
+            if key[pygame.K_c]:
+                moverPeca(tela, pecasPretas[0], dic["E3"])
         if key[pygame.K_ESCAPE]:
             running = False
         for event in pygame.event.get():
@@ -254,7 +280,21 @@ def interface():
             if estado == 0:
                 if event.type == pygame.KEYDOWN:
                     eletricidade(LARGURA, ALTURA, tela)
-                    estado += 1
+                    estado = 1
+                    #estado = 2
+                    #desenha_menu2(tela,estado)
+            if estado == 1 or estado == 2 or estado == 3: #estado 3 precisa ser removido daqui ou acertado
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
+                    print(pos) #usado para debugar
+                    if ((pos[0]>= 332 and pos[0]<= 569.5) and (pos[1] >= 168 and pos[1] <= 220)): #detecta "JOGAR"
+                        estado = 4
+                        desenha_tabuleiro(tela)
+                    if ((pos[0]>= 304.5 and pos[0]<= 594.5) and (pos[1] >= 252 and pos[1] <= 308)): #detecta "OPCOES"
+                        estado = 3
+                    if ((pos[0]>= 370.5 and pos[0]<= 529.5) and (pos[1] >= 336 and pos[1] <= 392)): #detecta "SAIR"
+                        running = False
+
     pygame.display.quit()
     pygame.quit()
 
