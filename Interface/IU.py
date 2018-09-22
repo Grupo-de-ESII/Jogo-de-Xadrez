@@ -87,11 +87,15 @@ BRANCO = [255,255,255]
 CINZA = [100, 100, 100] # [139,69,19]
 AMARELO = [255,255,0]
 
+#imagens de fundo
+imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
+imagem_menu2 = pygame.image.load("Ativos/menu_tela2.jpg")
+imagem_tabuleiro = pygame.image.load("Ativos/tabuleiromadeira.png")
+
 #auxiliares
 def desenha_menu1(tela):
     # Definido imagem de fundo da interface
-    img = pygame.image.load("Ativos/menu_tela1.jpg")
-    tela.blit(img, (0, 0))
+    tela.blit(imagem_menu1, (0, 0))
 
     pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
     pygame.display.update() # atualiza a tela com tudo que foi feito
@@ -101,8 +105,7 @@ def desenha_menu2(tela, estado):
     # Definido imagem de fundo da interface
     cor_texto = (255, 69, 0) #Cinza quase Branco
     cor_fundo = None #(115, 117, 117) #Cor estranha
-    img = pygame.image.load("Ativos/menu_tela2.jpg")
-    tela.blit(img, (0, 0))
+    tela.blit(imagem_menu2, (0, 0)) #Define o background como imagem_menu2
     pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
     pygame.display.update() # atualiza a tela com tudo que foi feito
     fonte_texto = pygame.font.Font("Ativos/Crackvetica.ttf", 60)
@@ -153,10 +156,7 @@ def eletricidade(largura, altura, tela):
     desenha_menu2(tela, 1)
 
 def desenha_tabuleiro(tela):
-    # Definido imagem de fundo da interface
-    img = pygame.image.load("Ativos/tabuleiromadeira.png")
-    tela.blit(img, (0, 0))
-
+    tela.blit(imagem_tabuleiro, (0, 0))
     # Pinta tabuleiro
     for i in range(0, 8):
         for j in range(0, 8):
@@ -188,18 +188,83 @@ def desenha_tabuleiro(tela):
     pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
     pygame.display.update() # atualiza a tela com tudo que foi feito
 
-def moverPeca(tela, peca, posicao):
+def mover_peca(tela, peca, posicao):
     pos_x = peca.rect.x
     pos_y = peca.rect.y
-    passo = 6
+
+    #afetam velocidade das peças
+    velocidade = 5
+    passo_x = L * velocidade
+    passo_y = L * velocidade
+
+    #serve para garantir igualdade entre máquinas de diferentes desempenhos
+    dt = 0
+    tempo_inicial = pygame.time.get_ticks() / 1000
+
+    #descobre movimentacao
     if(pos_x < posicao[0]):
-        if(pos_y < posicao[1]):
-            while(pos_x < posicao[0]):
-                pos_x += passo
-                pos_y += passo
+        if(pos_y == posicao[1]):
+            passo_y = 0
+        elif(pos_y > posicao[1]):
+            passo_y = passo_y * (-1)
+        while (pos_x < posicao[0]):
+            pos_x += passo_x * dt
+            pos_y += passo_y * dt
+            peca.rect.x = pos_x
+            peca.rect.y = pos_y
+            desenha_tabuleiro(tela)
+
+            tempo_final = pygame.time.get_ticks() / 1000
+            dt = tempo_final - tempo_inicial
+            tempo_inicial = tempo_final
+
+    elif(pos_x == posicao[0]):
+        passo_x = 0
+        if(pos_y > posicao[1]):
+            passo_y = passo_y * (-1)
+            while (pos_y > posicao[1]):
+                pos_x += passo_x * dt
+                pos_y += passo_y * dt
                 peca.rect.x = pos_x
                 peca.rect.y = pos_y
                 desenha_tabuleiro(tela)
+
+                tempo_final = pygame.time.get_ticks() / 1000
+                dt = tempo_final - tempo_inicial
+                tempo_inicial = tempo_final
+        else:
+            while (pos_y < posicao[1]):
+                pos_x += passo_x * dt
+                pos_y += passo_y * dt
+                peca.rect.x = pos_x
+                peca.rect.y = pos_y
+                desenha_tabuleiro(tela)
+
+                tempo_final = pygame.time.get_ticks() / 1000
+                dt = tempo_final - tempo_inicial
+                tempo_inicial = tempo_final
+
+    elif(pos_x > posicao[0]):
+        passo_x = passo_x * (-1)
+        if(pos_y == posicao[1]):
+            passo_y = 0
+        elif(pos_y > posicao[1]):
+            passo_y = passo_y * (-1)
+        while (pos_x > posicao[0]):
+            pos_x += passo_x * dt
+            pos_y += passo_y * dt
+            peca.rect.x = pos_x
+            peca.rect.y = pos_y
+            desenha_tabuleiro(tela)
+
+            tempo_final = pygame.time.get_ticks() / 1000
+            dt = tempo_final - tempo_inicial
+            tempo_inicial = tempo_final
+
+    #Ajustando erros do DT
+    peca.rect.x = posicao[0]
+    peca.rect.y = posicao[1]
+    desenha_tabuleiro(tela)
 ##########################################################################
 
 #função principal
@@ -246,6 +311,7 @@ def interface():
     cavaloPreto(dic["G8"], L)
     reiPreto(dic["D8"], L)
     rainhaPreto(dic["E8"], L)
+
     peaoBranco(dic["A2"], L)
     peaoBranco(dic["B2"], L)
     peaoBranco(dic["C2"], L)
@@ -270,8 +336,18 @@ def interface():
     while running:
         key = pygame.key.get_pressed()
         if estado == 4:
+            if key[pygame.K_p]:
+                mover_peca(tela, pecasPretas[0], dic["E3"])  # Peao petro A7
+                mover_peca(tela, pecasBrancas[0], dic["C4"])  # Peao branco A2
+                mover_peca(tela, pecasPretas[0], dic["A7"])  # Peao petro A7
+                mover_peca(tela, pecasBrancas[0], dic["A2"])  # Peao branco A2
+
+
             if key[pygame.K_c]:
-                moverPeca(tela, pecasPretas[0], dic["E3"])
+                mover_peca(tela, pecasPretas[12], dic["B6"])  # Cavalo preto B8
+                mover_peca(tela, pecasPretas[12], dic["C6"])
+
+
         if key[pygame.K_ESCAPE]:
             running = False
         for event in pygame.event.get():
@@ -279,10 +355,10 @@ def interface():
                 running = False
             if estado == 0:
                 if event.type == pygame.KEYDOWN:
-                    eletricidade(LARGURA, ALTURA, tela)
-                    estado = 1
-                    #estado = 2
-                    #desenha_menu2(tela,estado)
+                    #eletricidade(LARGURA, ALTURA, tela)
+                    #estado = 1
+                    estado = 2
+                    desenha_menu2(tela,estado)
             if estado == 1 or estado == 2 or estado == 3: #estado 3 precisa ser removido daqui ou acertado
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
