@@ -11,11 +11,116 @@ class Peca():
 			'rei' : Rei}
 		return l[nome](jogador)
 	
+
+	def novaPeca(nome,jogador):
+		l={
+			'peao' : Peao,
+			'torre' : Torre,
+			'cavalo' : Cavalo,
+			'bispo' : Bispo,
+			'rainha' : Rainha,
+			'rei' : Rei}
+		return l[nome](jogador)
+	
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
 	def tipo():
 		pass
+class Rainha(Peca):
+	def __init__(self,jogador):
+		self.jogador=jogador
+	def movimentosPossiveis(self,posicao,tabuleiro):
+		l=[]
+		(x,y)=posicao
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção a direita
+			if (x+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y))):
+				l.append([['rainha',posicao,(x+i,y)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y))!=jogador):
+				l.append([['rainha',posicao,(x+i,y)]])
+			else:
+				break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção a esquerda
+			if (x-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y))):
+				l.append([['rainha',posicao,(x-i,y)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y))!=jogador):
+				l.append([['rainha',posicao,(x-i,y)]])
+			else:
+				break
+	
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo para baixo
+			if (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x,y-i))):
+				l.append([['rainha',posicao,(x,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x,y-i))!=jogador):
+				l.append([['rainha',posicao,(x,y-i)]])
+			else:
+				break
+
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo para cima
+			if (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x,y+i))):
+				 l.append([['rainha',posicao,(x,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x,y+i))!=jogador):
+				l.append([['rainha',posicao,(x,y+i)]])
+			else:
+				break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto superior direito na visão das brancas
+			if (x+i)>7 or (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y+i))):
+				l.append([['rainha',posicao,(x+i,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=jogador):
+				l.append([['rainha',posicao,(x+i,y+i)]])
+			else:
+				break
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto inferior esquerdo na visão das brancas
+			if (x-i)<0 or (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y-i))):
+				l.append([['rainha',posicao,(x-i,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=jogador):
+				l.append([['rainha',posicao,(x-i,y-i)]])
+			else:
+				break
+	
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto inferior direito na visão das brancas
+			if (x+i)>7 or (y-i)<0:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x+i,y-i))):
+				l.append([['rainha',posicao,(x+i,y-i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=jogador):
+				l.append([['rainha',posicao,(x+i,y-i)]])
+			else:
+				break
+
+		for i in [1,2,3,4,5,6,7]:
+			#se movendo em direção ao canto superior esquerdo na visão das brancas
+			if (x-i)<0 or (y+i)>7:
+				break;
+			if (not tabuleiro.temPecaNaPosicao((x-i,y+i))):
+				 l.append([['rainha',posicao,(x-i,y+i)]])
+			elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=jogador):
+				l.append([['rainha',posicao,(x-i,y+i)]])
+			else:
+				break
+		return l
+	def tipo():
+		return 'rainha'
+
 
 class Torre(Peca):
 	def __init__(self,jogador):
