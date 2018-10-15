@@ -3,12 +3,12 @@ class Peca():
 	jogador=None
 	def __init__(self, nome,jogador):
 		l={
-			'peao' : Peao,
-			'torre' : Torre,
-			'cavalo' : Cavalo,
-			'bispo' : Bispo,
-			'rainha' : Rainha,
-			'rei' : Rei}
+			'peao' : Peao(jogador),
+			'torre' : Torre(jogador),
+			'cavalo' : Cavalo(jogador),
+			'bispo' : Bispo(jogador),
+			'rainha' : Rainha(jogador),
+			'rei' : Rei(jogador)}
 		return l[nome](jogador)
 	
 
@@ -25,8 +25,9 @@ class Peca():
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
-	def tipo():
+	def tipo(self):
 		pass
+
 class Rainha(Peca):
 	def __init__(self,jogador):
 		self.jogador=jogador
@@ -118,7 +119,7 @@ class Rainha(Peca):
 			else:
 				break
 		return l
-	def tipo():
+	def tipo(self):
 		return 'rainha'
 
 
@@ -171,6 +172,7 @@ class Torre(Peca):
 			else:
 				break
 		return l
+
 	def tipo(self):
 		return 'torre'
 
