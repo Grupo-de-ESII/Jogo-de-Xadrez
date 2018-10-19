@@ -30,13 +30,6 @@ class Tabuleiro:
 		self.pecas[6][7] = Cavalo(player2)
 		self.pecas[7][7] = Torre(player2)
 
-		#for i in range(8):
-		#	self.pecas[i][1] = Peao('peao')
-		#	self.pecas[i][0] = Peca(self.__pieceFromIndex(i), player1)
-
-		#for i in range(8):
-		#	self.pecas[i][6] = Peao('peao', player2)
-		#	self.pecas[i][7] = Peca(self.__pieceFromIndex(i), player2)
 
 	def possiveisMovimentos(self):
 		l=[]
@@ -55,16 +48,24 @@ class Tabuleiro:
 		(x,y) = posicao
 		return 0 <= x <= 7 and 0 <= y <= 7 and self.pecas[x][y] is not None
 
+
 	def avalia(self, heuristica):
 		return heuristica(self.pecas)
 	#private methods, don't call
 	#thanks to python by don't have private methods
 
-	@staticmethod
-	def __indexFromColumn(i):
-		return chr(i + ord('a'))
 
-	@staticmethod
-	def __pieceFromIndex(i):
+	def indexFromColumn(self,i):
+		return chr(i + ord('A'))
+
+
+	def pieceFromIndex(self,i):
 		l=['torre','cavalo','bispo','rainha','rei','bisto','cavalo','rook']
 		return l[i]
+
+	def matrix2str(self,posicao):
+		(x,y)=posicao
+		return self.indexFromColumn(x) + str(y+1)
+
+	def str2matrix(self, str):
+		return (ord(str[0])-ord('A'),int(str[1])-1)
