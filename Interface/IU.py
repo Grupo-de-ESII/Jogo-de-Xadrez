@@ -21,77 +21,6 @@ class uiPecaBranco(object):
         pecasBrancas.append(self)
 
 
-class peaoPreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/peao_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class bispoPreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/bispo_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class cavaloPreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/cavalo_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class torrePreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/torre_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class rainhaPreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/rainha_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class reiPreto(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/rei_preto.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasPretas.append(self)
-
-class peaoBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/peao_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
-
-class bispoBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/bispo_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
-
-class cavaloBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/cavalo_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
-
-class torreBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/torre_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
-
-class rainhaBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/rainha_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
-
-class reiBranco(object):
-    def __init__(self, posicao, tam):
-        self.imagem = pygame.image.load("Ativos/rei_branco.png")
-        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
-        pecasBrancas.append(self)
 ##########################################################################
 
 # info
@@ -103,10 +32,21 @@ L = ALTURA // 10  # Unidadade mínima da tela, L = lado de um quadrado do tabule
 BRANCO = [255,255,255]
 CINZA = [100, 100, 100] # [139,69,19]
 AMARELO = [255,255,0]
+VERDE = [0,255,0]
+BRANCAS = 1
+PRETAS = 2
+
+#Estados
+TELA_INICIO = 0;
+TELA_INTRO = 1;
+TELA_MENU = 2;
+TELA_OPCOES = 3;
+TELA_JOGO = 4;
 
 #imagens de fundo
 imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
 imagem_menu2 = pygame.image.load("Ativos/menu_tela2.jpg")
+imagem_opcoes = pygame.image.load("Ativos/opcoes_menu.png")
 imagem_tabuleiro = pygame.image.load("Ativos/tabuleiromadeira.png")
 
 #auxiliares
@@ -126,7 +66,7 @@ def desenha_menu2(tela, estado):
     pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
     pygame.display.update() # atualiza a tela com tudo que foi feito
     fonte_texto = pygame.font.Font("Ativos/Crackvetica.ttf", 60)
-    if estado == 1:
+    if estado == TELA_INTRO:
         pygame.time.delay(3000)
         texto_jogar = fonte_texto.render('Jogar', True, cor_texto, cor_fundo)
         texto_opcoes = fonte_texto.render('Opcoes', True, cor_texto, cor_fundo)
@@ -140,7 +80,7 @@ def desenha_menu2(tela, estado):
         tela.blit(texto_jogar, rect_jogar)
         tela.blit(texto_opcoes, rect_opcoes)
         tela.blit(texto_sair, rect_sair)
-    elif estado == 2:
+    elif estado == TELA_MENU:
         texto_jogar = fonte_texto.render('Jogar', True, cor_texto, cor_fundo)
         texto_opcoes = fonte_texto.render('Opcoes', True, cor_texto, cor_fundo)
         texto_sair = fonte_texto.render('Sair', True, cor_texto, cor_fundo)
@@ -153,6 +93,30 @@ def desenha_menu2(tela, estado):
         tela.blit(texto_jogar, rect_jogar)
         tela.blit(texto_opcoes, rect_opcoes)
         tela.blit(texto_sair, rect_sair)
+    pygame.display.update()
+    #jogar = [239, 64] opcoes = [189, 64] sair = [159, 64]
+
+#FUNÇÃO DESENHA_MENU2 PRECISA SER ORGANIZADAAAAAAA
+def desenha_opcoes(tela):
+    # Definido imagem de fundo da interface
+    cor_texto = (255, 69, 0) #Cinza quase Branco
+    cor_fundo = None #(115, 117, 117) #Cor estranha
+    tela.blit(imagem_opcoes, (0, 0)) #Define o background como imagem_opcoes
+    pygame.display.flip()  # Por algum motivo isso é necessário quando se usa um draw no pygame
+    pygame.display.update() # atualiza a tela com tudo que foi feito
+    fonte_texto = pygame.font.Font("Ativos/Comical Smash.ttf", 60)
+    texto_pecas = fonte_texto.render('Pecas:  Pretas X Brancas', True, cor_texto, cor_fundo)
+    texto_dificuldade = fonte_texto.render('Dificuldade:  Facil x Dificil', True, cor_texto, cor_fundo)
+    texto_voltar = fonte_texto.render('Voltar', True, cor_texto, cor_fundo)
+    rect_pecas = texto_pecas.get_rect()
+    rect_dificuldade = texto_dificuldade.get_rect()
+    rect_voltar = texto_voltar.get_rect()
+    rect_pecas.center = (450, 200)
+    rect_dificuldade.center = (450, 284)
+    rect_voltar.center = (450, 368)
+    tela.blit(texto_pecas, rect_pecas)
+    tela.blit(texto_dificuldade, rect_dificuldade)
+    tela.blit(texto_voltar, rect_voltar)
     pygame.display.update()
     #jogar = [239, 64] opcoes = [189, 64] sair = [159, 64]
 
@@ -289,8 +253,8 @@ def mover_peca(tela, peca, posicao):
 def interface():
     pygame.init()
     #JOGADOR1 FICA POR BAIXO
-    jogador1=1
-    jogador2=2
+    jogador1=BRANCAS
+    jogador2=PRETAS
     #funcao
     tab=Tabuleiro(1,2) #jogador 1 é branco, 2 é preto
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
@@ -318,77 +282,7 @@ def interface():
         "E1": [7*L, 8*L], "F1": [8*L, 8*L], "G1": [9*L, 8*L], "H1": [10*L, 8*L],
     }
 
-    #def __init__(self, posicao, tam, tipo):
-    if(jogador1 == 1):
-        uiPecaPreto(dic["A7"], L, "peao")
-        uiPecaPreto(dic["B7"], L, "peao")
-        uiPecaPreto(dic["C7"], L, "peao")
-        uiPecaPreto(dic["D7"], L, "peao")
-        uiPecaPreto(dic["E7"], L, "peao")
-        uiPecaPreto(dic["F7"], L, "peao")
-        uiPecaPreto(dic["G7"], L, "peao")
-        uiPecaPreto(dic["H7"], L, "peao")
-        uiPecaPreto(dic["C8"], L, "bispo")
-        uiPecaPreto(dic["F8"], L, "bispo")
-        uiPecaPreto(dic["A8"], L, "torre")
-        uiPecaPreto(dic["H8"], L, "torre")
-        uiPecaPreto(dic["B8"], L, "cavalo")
-        uiPecaPreto(dic["G8"], L, "cavalo")
-        uiPecaPreto(dic["D8"], L, "rei")
-        uiPecaPreto(dic["E8"], L, "rainha")
-
-        uiPecaBranco(dic["A2"], L, "peao")
-        uiPecaBranco(dic["B2"], L, "peao")
-        uiPecaBranco(dic["C2"], L, "peao")
-        uiPecaBranco(dic["D2"], L, "peao")
-        uiPecaBranco(dic["E2"], L, "peao")
-        uiPecaBranco(dic["F2"], L, "peao")
-        uiPecaBranco(dic["G2"], L, "peao")
-        uiPecaBranco(dic["H2"], L, "peao")
-        uiPecaBranco(dic["C1"], L, "bispo")
-        uiPecaBranco(dic["F1"], L, "bispo")
-        uiPecaBranco(dic["B1"], L, "cavalo")
-        uiPecaBranco(dic["G1"], L, "cavalo")
-        uiPecaBranco(dic["A1"], L, "torre")
-        uiPecaBranco(dic["H1"], L, "torre")
-        uiPecaBranco(dic["D1"], L, "rei")
-        uiPecaBranco(dic["E1"], L, "rainha")
-    else:
-        uiPecaBranco(dic["A7"], L, "peao")
-        uiPecaBranco(dic["B7"], L, "peao")
-        uiPecaBranco(dic["C7"], L, "peao")
-        uiPecaBranco(dic["D7"], L, "peao")
-        uiPecaBranco(dic["E7"], L, "peao")
-        uiPecaBranco(dic["F7"], L, "peao")
-        uiPecaBranco(dic["G7"], L, "peao")
-        uiPecaBranco(dic["H7"], L, "peao")
-        uiPecaBranco(dic["C8"], L, "bispo")
-        uiPecaBranco(dic["F8"], L, "bispo")
-        uiPecaBranco(dic["A8"], L, "torre")
-        uiPecaBranco(dic["H8"], L, "torre")
-        uiPecaBranco(dic["B8"], L, "cavalo")
-        uiPecaBranco(dic["G8"], L, "cavalo")
-        uiPecaBranco(dic["D8"], L, "rei")
-        uiPecaBranco(dic["E8"], L, "rainha")
-
-        uiPecaPreto(dic["A2"], L, "peao")
-        uiPecaPreto(dic["B2"], L, "peao")
-        uiPecaPreto(dic["C2"], L, "peao")
-        uiPecaPreto(dic["D2"], L, "peao")
-        uiPecaPreto(dic["E2"], L, "peao")
-        uiPecaPreto(dic["F2"], L, "peao")
-        uiPecaPreto(dic["G2"], L, "peao")
-        uiPecaPreto(dic["H2"], L, "peao")
-        uiPecaPreto(dic["C1"], L, "bispo")
-        uiPecaPreto(dic["F1"], L, "bispo")
-        uiPecaPreto(dic["B1"], L, "cavalo")
-        uiPecaPreto(dic["G1"], L, "cavalo")
-        uiPecaPreto(dic["A1"], L, "torre")
-        uiPecaPreto(dic["H1"], L, "torre")
-        uiPecaPreto(dic["D1"], L, "rei")
-        uiPecaPreto(dic["E1"], L, "rainha")
-
-    estado = 0
+    estado = TELA_INICIO
     desenha_menu1(tela)
 
     running = True
@@ -400,24 +294,114 @@ def interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if estado == 0:
+            if estado == TELA_INICIO:
                 if event.type == pygame.KEYDOWN:
                     #eletricidade(LARGURA, ALTURA, tela)
                     #estado = 1
-                    estado = 2
+                    estado = TELA_MENU
                     desenha_menu2(tela,estado)
-            if estado == 1 or estado == 2 or estado == 3: #estado 3 precisa ser removido daqui ou acertado
+
+            if estado == TELA_INTRO or estado == TELA_MENU: #estado 3 precisa ser removido daqui ou acertado
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
                     print(pos) #usado para debugar
                     if ((pos[0]>= 332 and pos[0]<= 569.5) and (pos[1] >= 168 and pos[1] <= 220)): #detecta "JOGAR"
-                        estado = 4
+                        estado = TELA_JOGO
+
+                        # def __init__(self, posicao, tam, tipo):
+                        if (jogador1 == 1):
+                            uiPecaPreto(dic["A7"], L, "peao")
+                            uiPecaPreto(dic["B7"], L, "peao")
+                            uiPecaPreto(dic["C7"], L, "peao")
+                            uiPecaPreto(dic["D7"], L, "peao")
+                            uiPecaPreto(dic["E7"], L, "peao")
+                            uiPecaPreto(dic["F7"], L, "peao")
+                            uiPecaPreto(dic["G7"], L, "peao")
+                            uiPecaPreto(dic["H7"], L, "peao")
+                            uiPecaPreto(dic["C8"], L, "bispo")
+                            uiPecaPreto(dic["F8"], L, "bispo")
+                            uiPecaPreto(dic["A8"], L, "torre")
+                            uiPecaPreto(dic["H8"], L, "torre")
+                            uiPecaPreto(dic["B8"], L, "cavalo")
+                            uiPecaPreto(dic["G8"], L, "cavalo")
+                            uiPecaPreto(dic["D8"], L, "rei")
+                            uiPecaPreto(dic["E8"], L, "rainha")
+
+                            uiPecaBranco(dic["A2"], L, "peao")
+                            uiPecaBranco(dic["B2"], L, "peao")
+                            uiPecaBranco(dic["C2"], L, "peao")
+                            uiPecaBranco(dic["D2"], L, "peao")
+                            uiPecaBranco(dic["E2"], L, "peao")
+                            uiPecaBranco(dic["F2"], L, "peao")
+                            uiPecaBranco(dic["G2"], L, "peao")
+                            uiPecaBranco(dic["H2"], L, "peao")
+                            uiPecaBranco(dic["C1"], L, "bispo")
+                            uiPecaBranco(dic["F1"], L, "bispo")
+                            uiPecaBranco(dic["B1"], L, "cavalo")
+                            uiPecaBranco(dic["G1"], L, "cavalo")
+                            uiPecaBranco(dic["A1"], L, "torre")
+                            uiPecaBranco(dic["H1"], L, "torre")
+                            uiPecaBranco(dic["D1"], L, "rei")
+                            uiPecaBranco(dic["E1"], L, "rainha")
+                        else:
+                            uiPecaBranco(dic["A7"], L, "peao")
+                            uiPecaBranco(dic["B7"], L, "peao")
+                            uiPecaBranco(dic["C7"], L, "peao")
+                            uiPecaBranco(dic["D7"], L, "peao")
+                            uiPecaBranco(dic["E7"], L, "peao")
+                            uiPecaBranco(dic["F7"], L, "peao")
+                            uiPecaBranco(dic["G7"], L, "peao")
+                            uiPecaBranco(dic["H7"], L, "peao")
+                            uiPecaBranco(dic["C8"], L, "bispo")
+                            uiPecaBranco(dic["F8"], L, "bispo")
+                            uiPecaBranco(dic["A8"], L, "torre")
+                            uiPecaBranco(dic["H8"], L, "torre")
+                            uiPecaBranco(dic["B8"], L, "cavalo")
+                            uiPecaBranco(dic["G8"], L, "cavalo")
+                            uiPecaBranco(dic["D8"], L, "rei")
+                            uiPecaBranco(dic["E8"], L, "rainha")
+
+                            uiPecaPreto(dic["A2"], L, "peao")
+                            uiPecaPreto(dic["B2"], L, "peao")
+                            uiPecaPreto(dic["C2"], L, "peao")
+                            uiPecaPreto(dic["D2"], L, "peao")
+                            uiPecaPreto(dic["E2"], L, "peao")
+                            uiPecaPreto(dic["F2"], L, "peao")
+                            uiPecaPreto(dic["G2"], L, "peao")
+                            uiPecaPreto(dic["H2"], L, "peao")
+                            uiPecaPreto(dic["C1"], L, "bispo")
+                            uiPecaPreto(dic["F1"], L, "bispo")
+                            uiPecaPreto(dic["B1"], L, "cavalo")
+                            uiPecaPreto(dic["G1"], L, "cavalo")
+                            uiPecaPreto(dic["A1"], L, "torre")
+                            uiPecaPreto(dic["H1"], L, "torre")
+                            uiPecaPreto(dic["D1"], L, "rei")
+                            uiPecaPreto(dic["E1"], L, "rainha")
                         desenha_tabuleiro(tela)
+
                     if ((pos[0]>= 304.5 and pos[0]<= 594.5) and (pos[1] >= 252 and pos[1] <= 308)): #detecta "OPCOES"
-                        estado = 3
+                        estado = TELA_OPCOES
+                        desenha_opcoes(tela)
                     if ((pos[0]>= 370.5 and pos[0]<= 529.5) and (pos[1] >= 336 and pos[1] <= 392)): #detecta "SAIR"
                           running = False
-            if estado == 4:
+
+            if estado == TELA_OPCOES:
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
+                    print(pos)  # usado para debugar
+                    if ((pos[0]>= 309 and pos[0]<= 503.5) and (pos[1] >= 168.5 and pos[1] <= 218)): #detecta "PRETAS"
+                        jogador1 = PRETAS
+                        jogador2 = BRANCAS
+                        print("PRETAS")
+                    if ((pos[0]>= 578 and pos[0]<= 797.5) and (pos[1] >= 168.5 and pos[1] <= 218)): #detecta "BRANCAS"
+                        jogador1 = BRANCAS
+                        jogador2 = PRETAS
+                        print("BRANCAS")
+                    if ((pos[0]>= 355.5 and pos[0]<= 545.5) and (pos[1] >= 336 and pos[1] <= 385)): #detecta "VOLTAR"
+                        estado = TELA_MENU
+                        desenha_menu2(tela,estado)
+
+            if estado == TELA_JOGO:
                 # (x[0] // 60 * 60, x[1] // 60 * 60)
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
@@ -430,6 +414,7 @@ def interface():
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
                             print(peca)
                             print(peca.tipo)
+
                 if key[pygame.K_p]:
                     print(pecasBrancas)
                     print(pecasPretas)
@@ -441,6 +426,7 @@ def interface():
                 if key[pygame.K_c]:
                     mover_peca(tela, pecasPretas[12], dic["B6"])  # Cavalo preto B8
                     mover_peca(tela, pecasPretas[12], dic["C6"])
+
     pygame.display.quit()
     pygame.quit()
 
