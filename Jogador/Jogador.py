@@ -1,3 +1,3 @@
 class Jogador:
-	def __init__(self):
-		pass
+	def __init__(self,cor):
+		self.cor=cor

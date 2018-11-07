@@ -5,6 +5,7 @@ from Tabuleiro.Tabuleiro import Tabuleiro
 
 pecasPretas = []
 pecasBrancas = []
+blocosVerdes = []
 
 class uiPecaPreto(object):
     def __init__(self, posicao, tam, tipo):
@@ -20,6 +21,11 @@ class uiPecaBranco(object):
         self.tipo = tipo;
         pecasBrancas.append(self)
 
+class uiBlocoVerde(object):
+    def __init__(self, posicao, tam):
+
+        self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
+        blocosVerdes.append(self)
 
 ##########################################################################
 
@@ -50,6 +56,12 @@ imagem_opcoes = pygame.image.load("Ativos/opcoes_menu.png")
 imagem_tabuleiro = pygame.image.load("Ativos/tabuleiromadeira.png")
 
 #auxiliares
+def postela2str(d, posicao):
+    for i in d:
+        pos = d[i]
+        if ((pos[0] == posicao[0]) and (pos[1] == posicao[1])):
+            return i
+
 def desenha_menu1(tela):
     # Definido imagem de fundo da interface
     tela.blit(imagem_menu1, (0, 0))
@@ -259,9 +271,8 @@ def interface():
     tab=Tabuleiro(1,2) #jogador 1 é branco, 2 é preto
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
-
-
     jogador=[jogador1,jogador2]
+
     #negolossauroRex
     dic = {
         "A8" : [3*L, L], "B8": [4*L, L], "C8": [5*L, L], "D8": [6*L, L],
@@ -343,6 +354,7 @@ def interface():
                             uiPecaBranco(dic["H1"], L, "torre")
                             uiPecaBranco(dic["D1"], L, "rei")
                             uiPecaBranco(dic["E1"], L, "rainha")
+                            tab = Tabuleiro(1, 2)  # jogador 1 é branco, 2 é preto
                         else:
                             uiPecaBranco(dic["A7"], L, "peao")
                             uiPecaBranco(dic["B7"], L, "peao")
@@ -377,6 +389,7 @@ def interface():
                             uiPecaPreto(dic["H1"], L, "torre")
                             uiPecaPreto(dic["D1"], L, "rei")
                             uiPecaPreto(dic["E1"], L, "rainha")
+                            tab = Tabuleiro(2, 1)  # jogador 1 é branco, 2 é preto
                         desenha_tabuleiro(tela)
 
                     if ((pos[0]>= 304.5 and pos[0]<= 594.5) and (pos[1] >= 252 and pos[1] <= 308)): #detecta "OPCOES"
@@ -408,10 +421,17 @@ def interface():
                     pos_peca = (pos[0] // 60 * 60, pos[1] // 60 * 60)
                     for peca in pecasPretas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
+                            tipo = peca.tipo
+                            if jogador1 == PRETAS:
+                                tab.pecaPossiveisMovimentos((0,0))
                             print(peca)
                             print(peca.tipo)
                     for peca in pecasBrancas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
+                            if jogador1 == BRANCAS:
+                                string = postela2str(dic, pos_peca)
+                                pos_tab = tab.str2matrix(string)
+                                l = tab.getiPos(tab.pecaPossiveisMovimentos(pos_tab))
                             print(peca)
                             print(peca.tipo)
 

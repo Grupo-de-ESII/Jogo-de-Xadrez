@@ -1,12 +1,22 @@
 #This file declares the Board Class, that contain the Pieces
 #and is a high-level interface to the user use the piece
 
-
+from copy import *
 from Peca.Peca import *
+from Jogador.Jogador import *
 
 class Tabuleiro:
-	def __init__(self, player1, player2):
+	def __init__(self, jogador1, jogador2):
 		self.pecas = [[None for j in range(8)] for i in range(8)]
+		self.pilha=[]
+
+		if(jogador1 == 1):
+			player1 = Jogador('preta')
+			player2 = Jogador('branca')
+		else:
+			player2 = Jogador('preta')
+			player1 = Jogador('branca')
+
 
 		for i in range(8):
 			self.pecas[i][1] = Peao(player1)
@@ -36,8 +46,20 @@ class Tabuleiro:
 		for i in range(8):
 			for j in range(8):
 				if self.pecas[i][j] is not None:
-					l = l + self.pecas[i][j].possiveisMovimentos()
+					l = l + self.pecas[i][j].movimentosPossiveis((i,j),self)
 		return l
+
+	def pecaPossiveisMovimentos(self, posicao):
+		(i,j) = posicao
+		print(i)
+		print(j)
+		print(self.pecas[i][j])
+		if self.pecas[i][j] is not None:
+			print('oi')
+			print(self.pecas[i][j].movimentosPossiveis((i,j),self))
+			return self.pecas[i][j].movimentosPossiveis((i,j),self)
+		return []
+
 	def tipoPecaNaPosicao(self, posicao):
 		(x,y) = posicao
 		if self.pecas[x][y] is not None:
@@ -58,10 +80,21 @@ class Tabuleiro:
 	def indexFromColumn(self,i):
 		return chr(i + ord('A'))
 
+	def playerPecaNaPosicao(self,posicao):
+		(x,y)=posicao
+		if(self.pecas[x][y] is not None):
+			return self.pecas[x][y].jogador
+		return None
 
 	def pieceFromIndex(self,i):
 		l=['torre','cavalo','bispo','rainha','rei','bisto','cavalo','rook']
 		return l[i]
+
+	def getiPos(self,a):
+		l = []
+		for i in a:
+			l.append(i[0][2])
+		return l
 
 	def matrix2str(self,posicao):
 		(x,y)=posicao
@@ -69,3 +102,18 @@ class Tabuleiro:
 
 	def str2matrix(self, str):
 		return (ord(str[0])-ord('A'),int(str[1])-1)
+
+	def move(self,posicao1,posicao2): #móve
+		(xi,yi)=posicao1
+		(xf,xf)=posicao2
+		tmp=self.pecas[xi][yi]
+		self.pecas[xi][yi]=None
+		self.pecas[xf][xf]=tmp
+
+	def falsoMovimento(self,posicao1,posicao2):
+		self.pilha.append(deepcopy(self.pecas))
+		self.move(posicao1,posicao2)
+
+	def reset(self):
+		self.pecas=self.pilha[-1]
+		self.pilha=self.pilha[0:-1]
