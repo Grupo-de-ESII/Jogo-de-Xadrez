@@ -1,6 +1,9 @@
 import pytest
 
-from ..Tabuleiro import Tabuleiro
+from Tabuleiro.Tabuleiro import Tabuleiro
+from Peca.Peca import *
+
+#tabuleiro
 def test_configuracao_inicial():
 	t=Tabuleiro(None,None)
 	#brancas
@@ -29,3 +32,4 @@ def test_configuracao_inicial():
 
 #def test_movimentacao_peao():
 	
+#Peca
