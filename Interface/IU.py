@@ -23,7 +23,7 @@ class uiPecaBranco(object):
 
 class uiBlocoVerde(object):
     def __init__(self, posicao, tam):
-
+        self.imagem = pygame.image.load("Ativos/quadradoVerde.jpg")
         self.rect = pygame.Rect(posicao[0], posicao[1], tam, tam)
         blocosVerdes.append(self)
 
@@ -33,6 +33,7 @@ class uiBlocoVerde(object):
 LARGURA = 900
 ALTURA = 600
 L = ALTURA // 10  # Unidadade mínima da tela, L = lado de um quadrado do tabuleiro
+TURNO = 1
 
 # Cores
 BRANCO = [255,255,255]
@@ -48,6 +49,7 @@ TELA_INTRO = 1;
 TELA_MENU = 2;
 TELA_OPCOES = 3;
 TELA_JOGO = 4;
+MOVIMENTO_JOGADOR = 5;
 
 #imagens de fundo
 imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
@@ -56,11 +58,40 @@ imagem_opcoes = pygame.image.load("Ativos/opcoes_menu.png")
 imagem_tabuleiro = pygame.image.load("Ativos/tabuleiromadeira.png")
 
 #auxiliares
-def postela2str(d, posicao):
+def postela2str(d, posicao): #Posicao da tela para A1...H8
     for i in d:
         pos = d[i]
         if ((pos[0] == posicao[0]) and (pos[1] == posicao[1])):
             return i
+
+def postela2matrix(dicionario, tabuleiro, posicao, invertido):
+    if invertido:
+        dicionario = generateInvDic(dicionario)
+    str = postela2str(dicionario, posicao)
+    return tabuleiro.str2matrix(str)
+
+def generateInvDic(d):
+    h={}
+    for i in range(ord('A'), ord('H')+1):
+        for j in range(1,9):
+            aux=chr(i) + str(j)
+            h[aux]=d[chr(i) + str(9-j)]
+    return h
+
+def posNorm(posicao): #Normaliza a posicao recebida para um quadrado do tabuleiro na tela
+    return (posicao[0] // 60 * 60, posicao[1] // 60 * 60)
+
+def criaBlkVerdes(dicionario, pos_peca, tabuleiro, invertido):
+    if invertido:
+        dicionario = generateInvDic(dicionario)
+    string = postela2str(dicionario, pos_peca)  # Descobre em qual quadrado a peça está, em termos de tabuleiro
+    pos_tab = tabuleiro.str2matrix(string)  # Descobre posicao correspondente no tabuleiro
+    print(pos_tab)
+    l = tabuleiro.getiPos(tabuleiro.pecaPossiveisMovimentos(pos_tab))  # Descobre movimentos válidos para a peça
+    print("Pegou a posicao:")
+    print(l)
+    for elem in l:
+        uiBlocoVerde(dicionario[tabuleiro.matrix2str(elem)], L)
 
 def desenha_menu1(tela):
     # Definido imagem de fundo da interface
@@ -132,6 +163,7 @@ def desenha_opcoes(tela):
     pygame.display.update()
     #jogar = [239, 64] opcoes = [189, 64] sair = [159, 64]
 
+
 #função da tela inicial -> efeito de eletricidade
 def eletricidade(largura, altura, tela):
     eletricidade = pygame.Surface((largura, altura))
@@ -148,7 +180,7 @@ def eletricidade(largura, altura, tela):
     pygame.mixer.music.play(0)
     desenha_menu2(tela, 1)
 
-def desenha_tabuleiro(tela):
+def desenha_tabuleiro(tela, estado):
     tela.blit(imagem_tabuleiro, (0, 0))
     # Pinta tabuleiro
     for i in range(0, 8):
@@ -171,6 +203,10 @@ def desenha_tabuleiro(tela):
     # Pinta dois quadrados amarelos do lado do tabuleiro
     pygame.draw.rect(tela, AMARELO, [L // 2, L, 2 * L, 8 * L])
     pygame.draw.rect(tela, AMARELO, [11 * L + (L // 2), L, 2 * L, 8 * L])
+
+    if (estado == MOVIMENTO_JOGADOR):
+        for blk in blocosVerdes:
+            tela.blit(blk.imagem, blk.rect)
 
     # COLOCA PECAS NA TELA
     for peca in pecasBrancas:
@@ -205,7 +241,7 @@ def mover_peca(tela, peca, posicao):
             pos_y += passo_y * dt
             peca.rect.x = pos_x
             peca.rect.y = pos_y
-            desenha_tabuleiro(tela)
+            desenha_tabuleiro(tela, MOVIMENTO_JOGADOR)
 
             tempo_final = pygame.time.get_ticks() / 1000
             dt = tempo_final - tempo_inicial
@@ -220,7 +256,7 @@ def mover_peca(tela, peca, posicao):
                 pos_y += passo_y * dt
                 peca.rect.x = pos_x
                 peca.rect.y = pos_y
-                desenha_tabuleiro(tela)
+                desenha_tabuleiro(tela, MOVIMENTO_JOGADOR)
 
                 tempo_final = pygame.time.get_ticks() / 1000
                 dt = tempo_final - tempo_inicial
@@ -231,7 +267,7 @@ def mover_peca(tela, peca, posicao):
                 pos_y += passo_y * dt
                 peca.rect.x = pos_x
                 peca.rect.y = pos_y
-                desenha_tabuleiro(tela)
+                desenha_tabuleiro(tela, MOVIMENTO_JOGADOR)
 
                 tempo_final = pygame.time.get_ticks() / 1000
                 dt = tempo_final - tempo_inicial
@@ -248,7 +284,7 @@ def mover_peca(tela, peca, posicao):
             pos_y += passo_y * dt
             peca.rect.x = pos_x
             peca.rect.y = pos_y
-            desenha_tabuleiro(tela)
+            desenha_tabuleiro(tela, MOVIMENTO_JOGADOR)
 
             tempo_final = pygame.time.get_ticks() / 1000
             dt = tempo_final - tempo_inicial
@@ -257,8 +293,9 @@ def mover_peca(tela, peca, posicao):
     #Ajustando erros do DT
     peca.rect.x = posicao[0]
     peca.rect.y = posicao[1]
-    desenha_tabuleiro(tela)
+    desenha_tabuleiro(tela, MOVIMENTO_JOGADOR)
 ##########################################################################
+
 
 #função principal
 
@@ -271,7 +308,6 @@ def interface():
     tab=Tabuleiro(1,2) #jogador 1 é branco, 2 é preto
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
-    jogador=[jogador1,jogador2]
 
     #negolossauroRex
     dic = {
@@ -295,8 +331,11 @@ def interface():
 
     estado = TELA_INICIO
     desenha_menu1(tela)
-
+    #[0] -> peca em movimento [1] -> peca que foi capturada
+    pecaEspecial = [None, None] #Salvar pecas que estão em ação em uso de alguma funcao.
     running = True
+    global TURNO
+
     while running:
         key = pygame.key.get_pressed()
 
@@ -320,7 +359,7 @@ def interface():
                         estado = TELA_JOGO
 
                         # def __init__(self, posicao, tam, tipo):
-                        if (jogador1 == 1):
+                        if (jogador1 == BRANCAS):
                             uiPecaPreto(dic["A7"], L, "peao")
                             uiPecaPreto(dic["B7"], L, "peao")
                             uiPecaPreto(dic["C7"], L, "peao")
@@ -390,7 +429,8 @@ def interface():
                             uiPecaPreto(dic["D1"], L, "rei")
                             uiPecaPreto(dic["E1"], L, "rainha")
                             tab = Tabuleiro(2, 1)  # jogador 1 é branco, 2 é preto
-                        desenha_tabuleiro(tela)
+
+                        desenha_tabuleiro(tela, estado)
 
                     if ((pos[0]>= 304.5 and pos[0]<= 594.5) and (pos[1] >= 252 and pos[1] <= 308)): #detecta "OPCOES"
                         estado = TELA_OPCOES
@@ -416,36 +456,89 @@ def interface():
 
             if estado == TELA_JOGO:
                 # (x[0] // 60 * 60, x[1] // 60 * 60)
+
                 if event.type == pygame.MOUSEBUTTONUP:
+
                     pos = pygame.mouse.get_pos()
-                    pos_peca = (pos[0] // 60 * 60, pos[1] // 60 * 60)
+                    pos_peca = posNorm(pos) #Converte para um quadrado da tela -> Ex: 362x63 -> 360x60
                     for peca in pecasPretas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
                             tipo = peca.tipo
-                            if jogador1 == PRETAS:
-                                tab.pecaPossiveisMovimentos((0,0))
+                            if ((jogador1 == PRETAS) and (TURNO == PRETAS)):
+                                estado = MOVIMENTO_JOGADOR
+                                criaBlkVerdes(dic, pos_peca, tab, True) #Boolean -> se tabuleiro está invertido
+                                pecaEspecial[0] = peca
                             print(peca)
                             print(peca.tipo)
                     for peca in pecasBrancas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
-                            if jogador1 == BRANCAS:
-                                string = postela2str(dic, pos_peca)
-                                pos_tab = tab.str2matrix(string)
-                                l = tab.getiPos(tab.pecaPossiveisMovimentos(pos_tab))
+                            if ((jogador1 == BRANCAS) and (TURNO == BRANCAS)):
+                                estado = MOVIMENTO_JOGADOR
+                                criaBlkVerdes(dic, pos_peca, tab, False) #Boolean -> se tabuleiro está invertido
+                                pecaEspecial[0] = peca #Salva peça de interesse, para realizar a movimentação
                             print(peca)
                             print(peca.tipo)
 
-                if key[pygame.K_p]:
-                    print(pecasBrancas)
-                    print(pecasPretas)
-                    mover_peca(tela, pecasPretas[0], dic["E3"])  # Peao petro A7
-                    mover_peca(tela, pecasBrancas[0], dic["C4"])  # Peao branco A2
-                    mover_peca(tela, pecasPretas[0], dic["A7"])  # Peao petro A7
-                    mover_peca(tela, pecasBrancas[0], dic["A2"])  # Peao branco A2
+                    desenha_tabuleiro(tela, estado)
 
+
+            if estado == MOVIMENTO_JOGADOR:
+                global blocosVerdes
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
+                    pos_blk = posNorm(pos)
+                    for blk in blocosVerdes:
+
+                        # Isso é só um tratamento que não deve ocorrer
+                        if pecaEspecial[0] == None: #Botei dentro do loop para poder dar um break e pular o loop
+                            break
+
+                        if blk.rect.x == pos_blk[0] and blk.rect.y == pos_blk[1]:
+                            if jogador1 == PRETAS:
+                                for peca in pecasBrancas:
+                                    if peca.rect.x == pos_blk[0] and peca.rect.y == pos_blk[1]:
+                                        #removePeca(peca)
+                                        print("COMEU, UHU PUTARIA")
+                            else:
+                                for peca in pecasPretas:
+                                    if peca.rect.x == pos_blk[0] and peca.rect.y == pos_blk[1]:
+                                        #removePeca(peca)
+                                        print("COMEU, UHU PUTARIA")
+
+                            #Realiza movimento e retorna ao estado anterior
+                            boolean = False
+                            if jogador1 == PRETAS:
+                                boolean = True
+
+                            aux = (pecaEspecial[0].rect.x, pecaEspecial[0].rect.y)
+                            pos_origem = postela2matrix(dic, tab, aux, boolean)
+                            pos_destino = postela2matrix(dic, tab, pos_blk, boolean)
+                            print(pos_origem)
+                            print(pos_destino)
+                            tab.move(pos_origem, pos_destino)
+                            mover_peca(tela, pecaEspecial[0], pos_blk)
+
+
+                            if TURNO == PRETAS:
+                                TURNO = BRANCAS
+                                jogador1 = BRANCAS
+                            else:
+                                TURNO = PRETAS
+                                jogador1 = PRETAS
+
+                            pecaEspecial[0] = None
+                            print("fez movimento")
+                            #Passou a vez = TRUE <- Falta algo assim, se necessário
+                            blocosVerdes = []
+                            estado = TELA_JOGO
+                            desenha_tabuleiro(tela, estado)
+
+                #Só para debugar, temporario
                 if key[pygame.K_c]:
-                    mover_peca(tela, pecasPretas[12], dic["B6"])  # Cavalo preto B8
-                    mover_peca(tela, pecasPretas[12], dic["C6"])
+                    print("cancelou movimento")
+                    blocosVerdes = []
+                    estado = TELA_JOGO
+                    desenha_tabuleiro(tela, estado)
 
     pygame.display.quit()
     pygame.quit()

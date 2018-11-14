@@ -10,7 +10,7 @@ class Peca():
 			'rainha' : Rainha(jogador),
 			'rei' : Rei(jogador)}
 		return l[nome](jogador)
-	
+
 
 	def novaPeca(nome,jogador):
 		l={
@@ -21,7 +21,7 @@ class Peca():
 			'rainha' : Rainha,
 			'rei' : Rei}
 		return l[nome](jogador)
-	
+
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		pass
 
@@ -54,7 +54,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x-i,y)]])
 			else:
 				break
-	
+
 		for i in [1,2,3,4,5,6,7]:
 			#se movendo para baixo
 			if (y-i)<0:
@@ -96,7 +96,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x-i,y-i)]])
 			else:
 				break
-	
+
 		for i in [1,2,3,4,5,6,7]:
 			#se movendo em direção ao canto inferior direito na visão das brancas
 			if (x+i)>7 or (y-i)<0:
@@ -149,7 +149,7 @@ class Torre(Peca):
 				l.append([['torre',posicao,(x-i,y)]])
 			else:
 				break
-	
+
 		for i in [1,2,3,4,5,6,7]:
 			#se movendo para baixo
 			if (y-i)<0:
@@ -196,7 +196,7 @@ class Cavalo(Peca):
 	def tipo(self):
 		return 'cavalo'
 
-		
+
 
 class Rei(Peca):
 	jaMeMovi = False
@@ -216,16 +216,16 @@ class Rei(Peca):
 			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=self.jogador):
         			l.append([['rei',posicao,(x+incx,y+incy)]])
 		return l
-			
-	
-	
+
+
+
 	def tipo(self):
 		return 'rei'
-			
+
 class Bispo(Peca):
 	def __init__(self,jogador):
 		self.jogador=jogador
-    
+
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		l=[]
 		(x,y)=posicao
@@ -249,7 +249,7 @@ class Bispo(Peca):
 				l.append([['bispo',posicao,(x-i,y-i)]])
 			else:
 				break
-	
+
 		for i in [1,2,3,4,5,6,7]:
 			#se movendo em direção ao canto inferior direito na visão das brancas
 			if (x+i)>7 or (y-i)<0:
@@ -272,9 +272,9 @@ class Bispo(Peca):
 			else:
 				break
 		return l
-      
-        
-  
+
+
+
 	def tipo(self):
 		return 'bispo'
 
@@ -298,19 +298,19 @@ class Peao(Peca):
 		if(tabuleiro.temPecaNaPosicao((x+incrementoPlayer,y+incrementoPlayer))\
 		   and tabuleiro.playerPecaNaPosicao((x+incrementoPlayer,y+incrementoPlayer)) != self.jogador):
 			l.append([['peao',posicao,(x+incrementoPlayer,y+incrementoPlayer)]])
-			
+
 		#captura para a esquerda
 		if(tabuleiro.temPecaNaPosicao((x-incrementoPlayer,y-incrementoPlayer))\
 		   and tabuleiro.playerPecaNaPosicao((x-incrementoPlayer,y-incrementoPlayer)) != self.jogador):
 			l.append([['peao',posicao,(x-incrementoPlayer,y-incrementoPlayer)]])
 		return l
-			
-	
-	
+
+
+
 	def tipo(self):
 		return 'peao'
-			
 
-		
-	
+
+
+
 
