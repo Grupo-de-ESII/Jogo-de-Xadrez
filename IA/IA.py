@@ -3,16 +3,22 @@ import random
 
 from Tabuleiro.Tabuleiro import *
 
+JOGADA_PECA = 0
+JOGADA_DE = 1
+JOGADA_PARA = 2
+
+
 class IA:
-	jogador_1 = '1'
-	jogador_2 = '2'
 
 	def __init__(self):
 		# Inicializa tabuleiro
-		self.tabuleiro = Tabuleiro(self.jogador_1, self.jogador_2)
+		self.tabuleiro = Tabuleiro()
+
+		self.jogador_1 = self.tabuleiro.jogador_1
+		self.jogador_2 = self.tabuleiro.jogador_2
 
 		# Pesos das peças pra usar na heurística
-		self.pesos = {'peao': 10, 'cavalo': 30, 'bispo': 30, 'torre': 50, 'rei': 90, 'rainha': 900, '': 0}
+		self.pesos = {'peao': 1, 'cavalo': 3, 'bispo': 3, 'torre': 5, 'rainha': 9, 'rei': 90, '': 0}
 
 	def get_melhor_jogada(self, jogador1):
 		jogadas = self.get_jogadas_possiveis()
@@ -30,7 +36,7 @@ class IA:
 		return melhor_jogada
 
 	def get_jogadas_possiveis(self):
-		return [[]]
+		return self.tabuleiro.possiveisMovimentos()
 
 	def minimax(self, profundidade, maximizando_player1):
 		# Limite da profundidade atingido
@@ -72,16 +78,15 @@ class IA:
 
 				if peca is not None:
 					tipo = peca.tipo()
-					jogador = peca.jogador
 
-					if jogador == self.jogador_1:
+					if peca.jogador == self.jogador_1:
 						somatorio += self.pesos[tipo]
 					else:
 						somatorio -= self.pesos[tipo]
 		return somatorio
 
 	def joga_jogada(self, jogada):
-		self.tabuleiro = self.tabuleiro
+		self.tabuleiro.falsoMovimento(jogada[0][JOGADA_DE], jogada[0][JOGADA_PARA])
 
 	def desfaz_jogada(self, jogada):
 		self.tabuleiro = self.tabuleiro

@@ -7,34 +7,34 @@ from Peca.Peca import *
 from Jogador.Jogador import *
 
 class Tabuleiro:
-    def __init__(self, jogador1, jogador2):
+    def __init__(self):
         self.pecas = [[None for j in range(8)] for i in range(8)]
         self.pilha = []
 
-        player2 = Jogador('branca')
-        player1 = Jogador('preta')
+        self.jogador_1 = Jogador('branca')
+        self.jogador_2 = Jogador('preta')
 
         for i in range(8):
-            self.pecas[i][1] = Peao(player1)
-        self.pecas[0][0] = Torre(player1)
-        self.pecas[1][0] = Cavalo(player1)
-        self.pecas[2][0] = Bispo(player1)
-        self.pecas[3][0] = Rei(player1)
-        self.pecas[4][0] = Rainha(player1)
-        self.pecas[5][0] = Bispo(player1)
-        self.pecas[6][0] = Cavalo(player1)
-        self.pecas[7][0] = Torre(player1)
+            self.pecas[i][1] = Peao(self.jogador_1)
+        self.pecas[0][0] = Torre(self.jogador_1)
+        self.pecas[1][0] = Cavalo(self.jogador_1)
+        self.pecas[2][0] = Bispo(self.jogador_1)
+        self.pecas[3][0] = Rei(self.jogador_1)
+        self.pecas[4][0] = Rainha(self.jogador_1)
+        self.pecas[5][0] = Bispo(self.jogador_1)
+        self.pecas[6][0] = Cavalo(self.jogador_1)
+        self.pecas[7][0] = Torre(self.jogador_1)
 
         for i in range(8):
-            self.pecas[i][6] = Peao(player2)
-        self.pecas[0][7] = Torre(player2)
-        self.pecas[1][7] = Cavalo(player2)
-        self.pecas[2][7] = Bispo(player2)
-        self.pecas[3][7] = Rei(player2)
-        self.pecas[4][7] = Rainha(player2)
-        self.pecas[5][7] = Bispo(player2)
-        self.pecas[6][7] = Cavalo(player2)
-        self.pecas[7][7] = Torre(player2)
+            self.pecas[i][6] = Peao(self.jogador_2)
+        self.pecas[0][7] = Torre(self.jogador_2)
+        self.pecas[1][7] = Cavalo(self.jogador_2)
+        self.pecas[2][7] = Bispo(self.jogador_2)
+        self.pecas[3][7] = Rei(self.jogador_2)
+        self.pecas[4][7] = Rainha(self.jogador_2)
+        self.pecas[5][7] = Bispo(self.jogador_2)
+        self.pecas[6][7] = Cavalo(self.jogador_2)
+        self.pecas[7][7] = Torre(self.jogador_2)
 
     def possiveisMovimentos(self):
         l = []
@@ -94,10 +94,12 @@ class Tabuleiro:
 
     def move(self, posicao1, posicao2):  # móve
         (xi, yi) = posicao1
-        (xf, xf) = posicao2
+        (xf, yf) = posicao2
+        if yf < 0 or yf > 7:
+            return
         tmp = self.pecas[xi][yi]
         self.pecas[xi][yi] = None
-        self.pecas[xf][xf] = tmp
+        self.pecas[xf][yf] = tmp
 
     def falsoMovimento(self, posicao1, posicao2):
         self.pilha.append(deepcopy(self.pecas))
