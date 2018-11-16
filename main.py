@@ -22,6 +22,4 @@ ti = time.clock()
 ia.get_melhor_jogada(True)
 print(time.clock() - ti)
 
-while True:
-	pass
 

@@ -212,7 +212,7 @@ class Rei(Peca):
 			if(x+incx>7 or x+incx<0 or y+incy>7 or y+incy<0):
 				continue
 			if (not tabuleiro.temPecaNaPosicao((x+incx,y+incy))):
-        			l.append([['rei',posicao,(x+i,y+i)]])
+        			l.append([['rei',posicao,(x+incx,y+incy)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+incx,y+incy))!=self.jogador):
         			l.append([['rei',posicao,(x+incx,y+incy)]])
 		return l
