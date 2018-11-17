@@ -100,8 +100,8 @@ class Tabuleiro:
         tmp = self.pecas[xi][yi]
         self.pecas[xi][yi] = None
         self.pecas[xf][yf] = tmp
-	if(tmp.tipo()=='peao'):
-		tmp.primeiroMovimento=False
+        if(tmp.tipo()=='peao'):
+            tmp.primeiroMovimento=False
 
     def falsoMovimento(self, posicao1, posicao2):
         self.pilha.append(deepcopy(self.pecas))
