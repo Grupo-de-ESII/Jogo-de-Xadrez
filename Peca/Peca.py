@@ -199,8 +199,8 @@ class Cavalo(Peca):
 
 
 class Rei(Peca):
-	jaMeMovi = False
 	def __init__(self,jogador):
+		self.jaMeMovi=False
 		self.jogador=jogador
 
 	def movimentosPossiveis(self,posicao,tabuleiro):
@@ -286,7 +286,7 @@ class Peao(Peca):
 	def movimentosPossiveis(self,posicao,tabuleiro):
 		l=[]
 		(x,y)=posicao
-		incrementoPlayer = -1 if self.jogador.cor == 'branca' else 1
+		incrementoPlayer = 1 if self.jogador.cor == 'branca' else -1
 		if(self.primeiroMovimento):
 			if not tabuleiro.temPecaNaPosicao((x,y+incrementoPlayer)) \
 			and not tabuleiro.temPecaNaPosicao((x,y+2*incrementoPlayer)):
