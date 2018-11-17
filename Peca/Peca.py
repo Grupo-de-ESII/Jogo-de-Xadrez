@@ -137,6 +137,7 @@ class Torre(Peca):
 				l.append([['torre',posicao,(x+i,y)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y))!=self.jogador):
 				l.append([['torre',posicao,(x+i,y)]])
+				break
 			else:
 				break
 		for i in [1,2,3,4,5,6,7]:
@@ -147,6 +148,7 @@ class Torre(Peca):
 				l.append([['torre',posicao,(x-i,y)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y))!=self.jogador):
 				l.append([['torre',posicao,(x-i,y)]])
+				break
 			else:
 				break
 
@@ -158,6 +160,7 @@ class Torre(Peca):
 				l.append([['torre',posicao,(x,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x,y-i))!=self.jogador):
 				l.append([['torre',posicao,(x,y-i)]])
+				break
 			else:
 				break
 
@@ -169,6 +172,7 @@ class Torre(Peca):
 				 l.append([['torre',posicao,(x,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x,y+i))!=self.jogador):
 				l.append([['torre',posicao,(x,y+i)]])
+				break
 			else:
 				break
 		return l
