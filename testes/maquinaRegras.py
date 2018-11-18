@@ -1,8 +1,9 @@
-import pytest
-
-from ..Tabuleiro import Tabuleiro
+import sys
+sys.path.append("../Tabuleiro")
+sys.path.append("../Peca")
+from Tabuleiro.Tabuleiro import Tabuleiro
 def test_configuracao_inicial():
-	t=Tabuleiro(None,None)
+	t=Tabuleiro()
 	#brancas
 	assert t.tipoPecaNaPosicao((0,0)) == 'torre'
 	assert t.tipoPecaNaPosicao((7,0)) == 'torre'
@@ -28,4 +29,3 @@ def test_configuracao_inicial():
 		assert t.tipoPecaNaPosicao((i , 6)) == 'peao'
 
 #def test_movimentacao_peao():
-	
