@@ -89,4 +89,4 @@ class IA:
 		self.tabuleiro.falsoMovimento(jogada[0][JOGADA_DE], jogada[0][JOGADA_PARA])
 
 	def desfaz_jogada(self, jogada):
-		self.tabuleiro = self.tabuleiro
+		self.tabuleiro.reset()
