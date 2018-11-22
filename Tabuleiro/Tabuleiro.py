@@ -7,20 +7,20 @@ from Peca.Peca import *
 from Jogador.Jogador import *
 
 class Tabuleiro:
-    def __init__(self, jogador1, jogador2):
+    def __init__(self):
         self.pecas = [[None for j in range(8)] for i in range(8)]
         self.pilha = []
 
-        player2 = Jogador('branca')
-        player1 = Jogador('preta')
+        player1 = Jogador('branca')
+        player2 = Jogador('preta')
 
         for i in range(8):
             self.pecas[i][1] = Peao(player1)
         self.pecas[0][0] = Torre(player1)
         self.pecas[1][0] = Cavalo(player1)
         self.pecas[2][0] = Bispo(player1)
-        self.pecas[3][0] = Rei(player1)
-        self.pecas[4][0] = Rainha(player1)
+        self.pecas[3][0] = Rainha(player1)
+        self.pecas[4][0] = Rei(player1)
         self.pecas[5][0] = Bispo(player1)
         self.pecas[6][0] = Cavalo(player1)
         self.pecas[7][0] = Torre(player1)
@@ -30,8 +30,8 @@ class Tabuleiro:
         self.pecas[0][7] = Torre(player2)
         self.pecas[1][7] = Cavalo(player2)
         self.pecas[2][7] = Bispo(player2)
-        self.pecas[3][7] = Rei(player2)
-        self.pecas[4][7] = Rainha(player2)
+        self.pecas[3][7] = Rainha(player2)
+        self.pecas[4][7] = Rei(player2)
         self.pecas[5][7] = Bispo(player2)
         self.pecas[6][7] = Cavalo(player2)
         self.pecas[7][7] = Torre(player2)
@@ -94,10 +94,12 @@ class Tabuleiro:
 
     def move(self, posicao1, posicao2):  # móve
         (xi, yi) = posicao1
-        (xf, xf) = posicao2
+        (xf, yf) = posicao2
         tmp = self.pecas[xi][yi]
         self.pecas[xi][yi] = None
-        self.pecas[xf][xf] = tmp
+        self.pecas[xf][yf] = tmp
+        if(self.pecas[xf][yf].tipo() == 'peao'):
+            self.pecas[xf][yf].primeiroMovimento=False
 
     def falsoMovimento(self, posicao1, posicao2):
         self.pilha.append(deepcopy(self.pecas))

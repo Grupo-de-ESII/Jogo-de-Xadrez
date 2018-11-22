@@ -5,6 +5,8 @@ from Tabuleiro.Tabuleiro import Tabuleiro
 
 pecasPretas = []
 pecasBrancas = []
+pecasJogador1Capturadas = []
+pecasJogador2Capturadas = []
 blocosVerdes = []
 
 class uiPecaPreto(object):
@@ -201,12 +203,29 @@ def desenha_tabuleiro(tela, estado):
                                      [i * L + 3 * L, j * L + L, L, L])  # [POS_X, POS_Y, LARGURA, ALTURA]
 
     # Pinta dois quadrados amarelos do lado do tabuleiro
-    pygame.draw.rect(tela, AMARELO, [L // 2, L, 2 * L, 8 * L])
-    pygame.draw.rect(tela, AMARELO, [11 * L + (L // 2), L, 2 * L, 8 * L])
+    pygame.draw.rect(tela, AMARELO, [L // 2, L, 2 * L, 8 * L]) #Esquerda
+    pygame.draw.rect(tela, AMARELO, [11 * L + (L // 2), L, 2 * L, 8 * L]) #Direita
 
     if (estado == MOVIMENTO_JOGADOR):
         for blk in blocosVerdes:
             tela.blit(blk.imagem, blk.rect)
+
+    for x in range(len(pecasJogador1Capturadas)):
+        xnovo= 11 * L + (L // 2) + (x%2)*L
+        ynovo= L + L * (x/2 if x % 2 ==0 else (x-1)/2)
+        pecasJogador1Capturadas[x].rect.x = xnovo
+        pecasJogador1Capturadas[x].rect.y = ynovo
+        peca = pecasJogador1Capturadas[x]
+        tela.blit(peca.imagem, peca.rect)
+
+
+    for x in range(len(pecasJogador2Capturadas)):
+        xnovo= L // 2 + (x%2)*L
+        ynovo= L + L * (x/2 if x % 2 ==0 else (x-1)/2)
+        pecasJogador2Capturadas[x].rect.x = xnovo
+        pecasJogador2Capturadas[x].rect.y = ynovo
+        peca = pecasJogador2Capturadas[x]
+        tela.blit(peca.imagem, peca.rect)
 
     # COLOCA PECAS NA TELA
     for peca in pecasBrancas:
@@ -304,8 +323,9 @@ def interface():
     #JOGADOR1 FICA POR BAIXO
     jogador1=BRANCAS
     jogador2=PRETAS
+
     #funcao
-    tab=Tabuleiro(1,2) #jogador 1 é branco, 2 é preto
+    tab=Tabuleiro() #jogador 1 é branco, 2 é preto
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
 
@@ -374,8 +394,8 @@ def interface():
                             uiPecaPreto(dic["H8"], L, "torre")
                             uiPecaPreto(dic["B8"], L, "cavalo")
                             uiPecaPreto(dic["G8"], L, "cavalo")
-                            uiPecaPreto(dic["D8"], L, "rei")
-                            uiPecaPreto(dic["E8"], L, "rainha")
+                            uiPecaPreto(dic["D8"], L, "rainha")
+                            uiPecaPreto(dic["E8"], L, "rei")
 
                             uiPecaBranco(dic["A2"], L, "peao")
                             uiPecaBranco(dic["B2"], L, "peao")
@@ -391,9 +411,9 @@ def interface():
                             uiPecaBranco(dic["G1"], L, "cavalo")
                             uiPecaBranco(dic["A1"], L, "torre")
                             uiPecaBranco(dic["H1"], L, "torre")
-                            uiPecaBranco(dic["D1"], L, "rei")
-                            uiPecaBranco(dic["E1"], L, "rainha")
-                            tab = Tabuleiro(1, 2)  # jogador 1 é branco, 2 é preto
+                            uiPecaBranco(dic["D1"], L, "rainha")
+                            uiPecaBranco(dic["E1"], L, "rei")
+                            tab = Tabuleiro()  # jogador 1 é branco, 2 é preto
                         else:
                             uiPecaBranco(dic["A7"], L, "peao")
                             uiPecaBranco(dic["B7"], L, "peao")
@@ -409,8 +429,8 @@ def interface():
                             uiPecaBranco(dic["H8"], L, "torre")
                             uiPecaBranco(dic["B8"], L, "cavalo")
                             uiPecaBranco(dic["G8"], L, "cavalo")
-                            uiPecaBranco(dic["D8"], L, "rei")
-                            uiPecaBranco(dic["E8"], L, "rainha")
+                            uiPecaBranco(dic["D8"], L, "rainha")
+                            uiPecaBranco(dic["E8"], L, "rei")
 
                             uiPecaPreto(dic["A2"], L, "peao")
                             uiPecaPreto(dic["B2"], L, "peao")
@@ -426,9 +446,9 @@ def interface():
                             uiPecaPreto(dic["G1"], L, "cavalo")
                             uiPecaPreto(dic["A1"], L, "torre")
                             uiPecaPreto(dic["H1"], L, "torre")
-                            uiPecaPreto(dic["D1"], L, "rei")
-                            uiPecaPreto(dic["E1"], L, "rainha")
-                            tab = Tabuleiro(2, 1)  # jogador 1 é branco, 2 é preto
+                            uiPecaPreto(dic["D1"], L, "rainha")
+                            uiPecaPreto(dic["E1"], L, "rei")
+                            tab = Tabuleiro()  # jogador 1 é branco, 2 é preto
 
                         desenha_tabuleiro(tela, estado)
 
@@ -463,19 +483,33 @@ def interface():
                     pos_peca = posNorm(pos) #Converte para um quadrado da tela -> Ex: 362x63 -> 360x60
                     for peca in pecasPretas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
-                            tipo = peca.tipo
-                            if ((jogador1 == PRETAS) and (TURNO == PRETAS)):
+                            if (TURNO == PRETAS):
                                 estado = MOVIMENTO_JOGADOR
-                                criaBlkVerdes(dic, pos_peca, tab, True) #Boolean -> se tabuleiro está invertido
+                                if jogador1 == PRETAS:
+                                    criaBlkVerdes(dic, pos_peca, tab,
+                                                  True)  # Boolean -> se tabuleiro está invertido
+                                else:
+                                    criaBlkVerdes(dic, pos_peca, tab,
+                                                  False)  # Boolean -> se tabuleiro não está invertido
+
                                 pecaEspecial[0] = peca
+
                             print(peca)
                             print(peca.tipo)
+
                     for peca in pecasBrancas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
-                            if ((jogador1 == BRANCAS) and (TURNO == BRANCAS)):
+                            if (TURNO == BRANCAS):
                                 estado = MOVIMENTO_JOGADOR
-                                criaBlkVerdes(dic, pos_peca, tab, False) #Boolean -> se tabuleiro está invertido
+                                if jogador1 == PRETAS:
+                                    criaBlkVerdes(dic, pos_peca, tab,
+                                                  True) #Boolean -> se tabuleiro está invertido
+                                else:
+                                    criaBlkVerdes(dic, pos_peca, tab,
+                                                  False)  # Boolean -> se tabuleiro não está invertido
+
                                 pecaEspecial[0] = peca #Salva peça de interesse, para realizar a movimentação
+
                             print(peca)
                             print(peca.tipo)
 
@@ -494,15 +528,23 @@ def interface():
                             break
 
                         if blk.rect.x == pos_blk[0] and blk.rect.y == pos_blk[1]:
-                            if jogador1 == PRETAS:
+                            if TURNO == PRETAS:
                                 for peca in pecasBrancas:
                                     if peca.rect.x == pos_blk[0] and peca.rect.y == pos_blk[1]:
-                                        #removePeca(peca)
+                                        if jogador1 == TURNO:
+                                            pecasJogador2Capturadas.append(peca)
+                                        else:
+                                            pecasJogador1Capturadas.append(peca)
+                                        pecasBrancas.remove(peca)
                                         print("COMEU, UHU PUTARIA")
                             else:
                                 for peca in pecasPretas:
                                     if peca.rect.x == pos_blk[0] and peca.rect.y == pos_blk[1]:
-                                        #removePeca(peca)
+                                        if jogador1 == TURNO:
+                                            pecasJogador2Capturadas.append(peca)
+                                        else:
+                                            pecasJogador1Capturadas.append(peca)
+                                        pecasPretas.remove(peca)
                                         print("COMEU, UHU PUTARIA")
 
                             #Realiza movimento e retorna ao estado anterior
@@ -521,10 +563,8 @@ def interface():
 
                             if TURNO == PRETAS:
                                 TURNO = BRANCAS
-                                jogador1 = BRANCAS
                             else:
                                 TURNO = PRETAS
-                                jogador1 = PRETAS
 
                             pecaEspecial[0] = None
                             print("fez movimento")
