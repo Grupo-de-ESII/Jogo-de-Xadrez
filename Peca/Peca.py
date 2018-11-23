@@ -1,34 +1,4 @@
-
-class Peca():
-	jogador=None
-	def __init__(self, nome,jogador):
-		l={
-			'peao' : Peao(jogador),
-			'torre' : Torre(jogador),
-			'cavalo' : Cavalo(jogador),
-			'bispo' : Bispo(jogador),
-			'rainha' : Rainha(jogador),
-			'rei' : Rei(jogador)}
-		return l[nome](jogador)
-
-
-	def novaPeca(nome,jogador):
-		l={
-			'peao' : Peao,
-			'torre' : Torre,
-			'cavalo' : Cavalo,
-			'bispo' : Bispo,
-			'rainha' : Rainha,
-			'rei' : Rei}
-		return l[nome](jogador)
-
-	def movimentosPossiveis(self,posicao,tabuleiro):
-		pass
-
-	def tipo(self):
-		pass
-
-class Rainha(Peca):
+class Rainha:
 	def __init__(self,jogador):
 		self.jogador=jogador
 	def movimentosPossiveis(self,posicao,tabuleiro):
@@ -131,7 +101,7 @@ class Rainha(Peca):
 		return 'rainha'
 
 
-class Torre(Peca):
+class Torre:
 	def __init__(self,jogador):
 		self.jogador=jogador
 	def movimentosPossiveis(self,posicao,tabuleiro):
@@ -189,7 +159,7 @@ class Torre(Peca):
 		return 'torre'
 
 
-class Cavalo(Peca):
+class Cavalo:
 	def __init__(self,jogador):
 		self.jogador=jogador
 	def movimentosPossiveis(self,posicao,tabuleiro):
@@ -210,7 +180,7 @@ class Cavalo(Peca):
 
 
 
-class Rei(Peca):
+class Rei:
 	def __init__(self,jogador):
 		self.jaMeMovi=False
 		self.jogador=jogador
@@ -234,7 +204,7 @@ class Rei(Peca):
 	def tipo(self):
 		return 'rei'
 
-class Bispo(Peca):
+class Bispo:
 	def __init__(self,jogador):
 		self.jogador=jogador
 
@@ -294,7 +264,7 @@ class Bispo(Peca):
 	def tipo(self):
 		return 'bispo'
 
-class Peao(Peca):
+class Peao:
 	def __init__(self,jogador):
 		self.jogador=jogador
 		self.primeiroMovimento=True
