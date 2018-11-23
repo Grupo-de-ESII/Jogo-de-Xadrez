@@ -42,6 +42,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x+i,y)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y))!=self.jogador):
 				l.append([['rainha',posicao,(x+i,y)]])
+				break
 			else:
 				break
 		for i in [1,2,3,4,5,6,7]:
@@ -52,6 +53,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x-i,y)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y))!=self.jogador):
 				l.append([['rainha',posicao,(x-i,y)]])
+				break
 			else:
 				break
 
@@ -63,6 +65,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x,y-i))!=self.jogador):
 				l.append([['rainha',posicao,(x,y-i)]])
+				break
 			else:
 				break
 
@@ -74,6 +77,7 @@ class Rainha(Peca):
 				 l.append([['rainha',posicao,(x,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x,y+i))!=self.jogador):
 				l.append([['rainha',posicao,(x,y+i)]])
+				break
 			else:
 				break
 		for i in [1,2,3,4,5,6,7]:
@@ -84,6 +88,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x+i,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=self.jogador):
 				l.append([['rainha',posicao,(x+i,y+i)]])
+				break
 			else:
 				break
 		for i in [1,2,3,4,5,6,7]:
@@ -94,6 +99,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x-i,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=self.jogador):
 				l.append([['rainha',posicao,(x-i,y-i)]])
+				break
 			else:
 				break
 
@@ -105,6 +111,7 @@ class Rainha(Peca):
 				l.append([['rainha',posicao,(x+i,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=self.jogador):
 				l.append([['rainha',posicao,(x+i,y-i)]])
+				break
 			else:
 				break
 
@@ -116,6 +123,7 @@ class Rainha(Peca):
 				 l.append([['rainha',posicao,(x-i,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=self.jogador):
 				l.append([['rainha',posicao,(x-i,y+i)]])
+				break
 			else:
 				break
 		return l
@@ -143,7 +151,7 @@ class Torre(Peca):
 		for i in [1,2,3,4,5,6,7]:
 			#se movendo em direção a esquerda
 			if (x-i)<0:
-				break;
+				break
 			if (not tabuleiro.temPecaNaPosicao((x-i,y))):
 				l.append([['torre',posicao,(x-i,y)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y))!=self.jogador):
@@ -241,6 +249,7 @@ class Bispo(Peca):
 				l.append([['bispo',posicao,(x+i,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y+i))!=self.jogador):
 				l.append([['bispo',posicao,(x+i,y+i)]])
+				break
 			else:
 				break
 		for i in [1,2,3,4,5,6,7]:
@@ -251,6 +260,7 @@ class Bispo(Peca):
 				l.append([['bispo',posicao,(x-i,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y-i))!=self.jogador):
 				l.append([['bispo',posicao,(x-i,y-i)]])
+				break
 			else:
 				break
 
@@ -262,6 +272,7 @@ class Bispo(Peca):
 				l.append([['bispo',posicao,(x+i,y-i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x+i,y-i))!=self.jogador):
 				l.append([['bispo',posicao,(x+i,y-i)]])
+				break
 			else:
 				break
 
@@ -273,6 +284,7 @@ class Bispo(Peca):
 				 l.append([['bispo',posicao,(x-i,y+i)]])
 			elif (tabuleiro.playerPecaNaPosicao((x-i,y+i))!=self.jogador):
 				l.append([['bispo',posicao,(x-i,y+i)]])
+				break
 			else:
 				break
 		return l
@@ -304,9 +316,9 @@ class Peao(Peca):
 			l.append([['peao',posicao,(x+incrementoPlayer,y+incrementoPlayer)]])
 
 		#captura para a esquerda
-		if(tabuleiro.temPecaNaPosicao((x-incrementoPlayer,y-incrementoPlayer))\
-		   and tabuleiro.playerPecaNaPosicao((x-incrementoPlayer,y-incrementoPlayer)) != self.jogador):
-			l.append([['peao',posicao,(x-incrementoPlayer,y-incrementoPlayer)]])
+		if(tabuleiro.temPecaNaPosicao((x-incrementoPlayer,y+incrementoPlayer))\
+		   and tabuleiro.playerPecaNaPosicao((x-incrementoPlayer,y+incrementoPlayer)) != self.jogador):
+			l.append([['peao',posicao,(x-incrementoPlayer,y+incrementoPlayer)]])
 		return l
 
 
