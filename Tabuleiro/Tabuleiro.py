@@ -108,3 +108,12 @@ class Tabuleiro:
     def reset(self):
         self.pecas = self.pilha[-1]
         self.pilha = self.pilha[0:-1]
+
+    def __str__(self):
+        s=""
+        l=len(self.pecas)
+        for i in range(l):
+            for j in range(l):
+                s=s+" " + str(self.pecas[i][j].tipo() if self.pecas[i][j] is not None else "    ")
+            s=s+"\n"
+        return s

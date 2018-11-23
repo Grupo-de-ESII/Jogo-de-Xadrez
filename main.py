@@ -1,6 +1,7 @@
 import Tabuleiro,Jogador
 
-
+from IA.IA import *
+import time
 
 #dont polute here with a lot of global variables.
 #make KISS, create a class with constants if needed
@@ -15,10 +16,10 @@ import Tabuleiro,Jogador
 #graphics init
 
 
+ia = IA()
 
+ti = time.clock()
+ia.get_melhor_jogada(True)
+print(time.clock() - ti)
 
-
-
-while(True):
-	pass
 
