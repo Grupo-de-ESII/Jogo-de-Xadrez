@@ -1,5 +1,6 @@
 import sys
 import random
+from Jogador.Jogador import *
 
 from Tabuleiro.Tabuleiro import *
 
@@ -14,8 +15,8 @@ class IA:
 		# Inicializa tabuleiro
 		self.tabuleiro = Tabuleiro()
 
-		self.jogador_1 = self.tabuleiro.jogador_1
-		self.jogador_2 = self.tabuleiro.jogador_2
+		self.jogador_1 = Jogador('branca')
+		self.jogador_2 = Jogador('preta')
 
 		# Pesos das peças pra usar na heurística
 		self.pesos = {'peao': 1, 'cavalo': 3, 'bispo': 3, 'torre': 5, 'rainha': 9, 'rei': 90, '': 0}
