@@ -1,7 +1,8 @@
 import pygame
 
 #temporario --------------------------------------------------------
-from Tabuleiro.Tabuleiro import Tabuleiro
+from Tabuleiro import *
+#from Tabuleiro.Tabuleiro import Tabuleiro
 
 pecasPretas = []
 pecasBrancas = []

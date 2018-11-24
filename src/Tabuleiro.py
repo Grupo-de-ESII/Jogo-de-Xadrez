@@ -3,8 +3,10 @@
 
 
 from copy import *
-from Peca.Peca import *
-from Jogador.Jogador import *
+from Peca import *
+#from Peca.Peca import *
+from Jogador import *
+#from Jogador.Jogador import *
 
 class Tabuleiro:
     def __init__(self):
