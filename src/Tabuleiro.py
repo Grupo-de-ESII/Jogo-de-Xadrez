@@ -4,9 +4,7 @@
 
 from copy import *
 from Peca import *
-#from Peca.Peca import *
 from Jogador import *
-#from Jogador.Jogador import *
 
 class Tabuleiro:
     def __init__(self):
@@ -15,7 +13,7 @@ class Tabuleiro:
 
         player1 = Jogador('branca')
         player2 = Jogador('preta')
-
+        self.posicaoReis={player1:(4,0),player2:(4,7)}
         for i in range(8):
             self.pecas[i][1] = Peao(player1)
         self.pecas[0][0] = Torre(player1)
@@ -102,6 +100,9 @@ class Tabuleiro:
         self.pecas[xf][yf] = tmp
         if(self.pecas[xf][yf].tipo() == 'peao'):
             self.pecas[xf][yf].primeiroMovimento=False
+        elif(self.pecas[xf][yf].tipo() == 'rei'):
+            self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
+            
 
     def falsoMovimento(self, posicao1, posicao2):
         self.pilha.append(deepcopy(self.pecas))
