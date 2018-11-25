@@ -28,7 +28,7 @@ class IA:
 		melhor_jogada = None
 
 		for jogada in jogadas:
-			valor_jogada = self.minimax(3, jogador1)
+			valor_jogada = self.minimax(1, jogador1)
 
 			if valor_jogada > melhor_valor:
 				melhor_valor = valor_jogada
