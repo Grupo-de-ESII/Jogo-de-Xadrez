@@ -1,3 +1,5 @@
+from functools import *
+
 class Rainha:
 	def __init__(self,jogador):
 		self.jogador=jogador
@@ -200,7 +202,11 @@ class Rei:
 		return l
 
 
-
+	def estouEmXeque(self,posicao,tabuleiro):
+		movimentosPossiveis=tabuleiro.possiveisMovimentos()
+		movimentosSemRoque=filter(lambda x: len(x)==1,movimentosPossiveis)
+		posicoesFinais=[p for p in map(lambda x: x[0][2],movimentosSemRoque)]
+		return posicoesFinais.count(posicao)!=0
 	def tipo(self):
 		return 'rei'
 

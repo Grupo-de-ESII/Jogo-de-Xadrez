@@ -101,6 +101,7 @@ class Tabuleiro:
         if(self.pecas[xf][yf].tipo() == 'peao'):
             self.pecas[xf][yf].primeiroMovimento=False
         elif(self.pecas[xf][yf].tipo() == 'rei'):
+            self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
             
 
