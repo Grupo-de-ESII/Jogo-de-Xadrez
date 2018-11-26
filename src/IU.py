@@ -537,7 +537,7 @@ def interface():
                                         else:
                                             pecasJogador1Capturadas.append(peca)
                                         pecasBrancas.remove(peca)
-                                        print("COMEU, UHU PUTARIA")
+                                        
                             else:
                                 for peca in pecasPretas:
                                     if peca.rect.x == pos_blk[0] and peca.rect.y == pos_blk[1]:
@@ -546,7 +546,7 @@ def interface():
                                         else:
                                             pecasJogador1Capturadas.append(peca)
                                         pecasPretas.remove(peca)
-                                        print("COMEU, UHU PUTARIA")
+                                        
 
                             #Realiza movimento e retorna ao estado anterior
                             boolean = False
