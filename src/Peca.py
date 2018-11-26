@@ -98,7 +98,7 @@ class Rainha:
 				break
 			else:
 				break
-		return l
+		return l 
 	def tipo(self):
 		return 'rainha'
 
@@ -203,10 +203,14 @@ class Rei:
 
 
 	def estouEmXeque(self,posicao,tabuleiro):
-		movimentosPossiveis=tabuleiro.possiveisMovimentos()
-		movimentosSemRoque=filter(lambda x: len(x)==1,movimentosPossiveis)
-		posicoesFinais=[p for p in map(lambda x: x[0][2],movimentosSemRoque)]
-		return posicoesFinais.count(posicao)!=0
+		for i in range(8):
+			for j in range(8):
+				if(tabuleiro.pecas[i][j] is not None and tabuleiro.pecas[i][j].jogador!=self.jogador):
+					movimentosPecaInimiga=tabuleiro.pecas[i][j].movimentosPossiveis((i,j),tabuleiro)
+					posicoesFinais=[p for p in map(lambda x: x[0][2],movimentosPecaInimiga)]
+					if(posicoesFinais.count(posicao) != 0):
+						return True
+		return False
 	def tipo(self):
 		return 'rei'
 

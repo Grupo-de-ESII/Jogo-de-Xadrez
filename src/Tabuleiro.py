@@ -47,7 +47,20 @@ class Tabuleiro:
     def pecaPossiveisMovimentos(self, posicao):
         (i, j) = posicao
         if self.pecas[i][j] is not None:
-            return self.pecas[i][j].movimentosPossiveis((i, j), self)
+            l=self.pecas[i][j].movimentosPossiveis((i, j), self)
+            print("Jogador é " + str(self.pecas[i][j].jogador))
+            print("Chaves são : " + str(list(self.posicaoReis.keys())))
+            posicaoMeuRei=self.posicaoReis[self.pecas[i][j].jogador]
+            meuRei=self.pecas[posicaoMeuRei[0]][posicaoMeuRei[1]]
+            if(meuRei.estouEmXeque(posicaoMeuRei,self)):
+                aux=[]
+                for jogada in l:
+                    self.falsoMovimento(jogada[0][1],jogada[0][2])
+                    if(not meuRei.estouEmXeque(posicaoMeuRei,self)):
+                        aux.append(jogada)
+                    self.reset()
+                return aux
+            return l #Não contemplo ainda verificação de xeque descoberto
         return []
 
     def tipoPecaNaPosicao(self, posicao):
@@ -103,6 +116,7 @@ class Tabuleiro:
         elif(self.pecas[xf][yf].tipo() == 'rei'):
             self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
+            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
             
 
     def falsoMovimento(self, posicao1, posicao2):
