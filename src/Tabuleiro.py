@@ -40,27 +40,26 @@ class Tabuleiro:
         l = []
         for i in range(8):
             for j in range(8):
-                if self.pecas[i][j] is not None:
-                    l = l + self.pecas[i][j].movimentosPossiveis((i, j), self)
+                l=l+self.pecaPossiveisMovimentos((i,j))
         return l
 
     def pecaPossiveisMovimentos(self, posicao):
         (i, j) = posicao
         if self.pecas[i][j] is not None:
+            meuTipo=self.pecas[i][j].tipo()
             l=self.pecas[i][j].movimentosPossiveis((i, j), self)
-            print("Jogador é " + str(self.pecas[i][j].jogador))
-            print("Chaves são : " + str(list(self.posicaoReis.keys())))
+            print("Movimentos antes do tratamento : " + str(l))
             posicaoMeuRei=self.posicaoReis[self.pecas[i][j].jogador]
             meuRei=self.pecas[posicaoMeuRei[0]][posicaoMeuRei[1]]
-            if(meuRei.estouEmXeque(posicaoMeuRei,self)):
-                aux=[]
-                for jogada in l:
-                    self.falsoMovimento(jogada[0][1],jogada[0][2])
-                    if(not meuRei.estouEmXeque(posicaoMeuRei,self)):
-                        aux.append(jogada)
-                    self.reset()
-                return aux
-            return l #Não contemplo ainda verificação de xeque descoberto
+            aux=[]
+            for jogada in l:
+                self.falsoMovimento(jogada[0][1],jogada[0][2])
+                if(meuTipo != 'rei' and not meuRei.estouEmXeque(posicaoMeuRei,self)):
+                    aux.append(jogada)
+                if(meuTipo == 'rei' and not meuRei.estouEmXeque(jogada[0][2],self)):
+                    aux.append(jogada)
+                self.reset()
+            return aux
         return []
 
     def tipoPecaNaPosicao(self, posicao):
