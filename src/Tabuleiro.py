@@ -11,43 +11,67 @@ class Tabuleiro:
         self.pecas = [[None for j in range(8)] for i in range(8)]
         self.pilha = []
 
-        player1 = Jogador('branca')
-        player2 = Jogador('preta')
-        self.posicaoReis={player1:(4,0),player2:(4,7)}
+        self.player1 = Jogador('branca')
+        self.player2 = Jogador('preta')
+        self.posicaoReis={self.player1:(4,0),self.player2:(4,7)}
         for i in range(8):
-            self.pecas[i][1] = Peao(player1)
-        self.pecas[0][0] = Torre(player1)
-        self.pecas[1][0] = Cavalo(player1)
-        self.pecas[2][0] = Bispo(player1)
-        self.pecas[3][0] = Rainha(player1)
-        self.pecas[4][0] = Rei(player1)
-        self.pecas[5][0] = Bispo(player1)
-        self.pecas[6][0] = Cavalo(player1)
-        self.pecas[7][0] = Torre(player1)
+            self.pecas[i][1] = Peao(self.player1)
+        self.pecas[0][0] = Torre(self.player1)
+        self.pecas[1][0] = Cavalo(self.player1)
+        self.pecas[2][0] = Bispo(self.player1)
+        self.pecas[3][0] = Rainha(self.player1)
+        self.pecas[4][0] = Rei(self.player1)
+        self.pecas[5][0] = Bispo(self.player1)
+        self.pecas[6][0] = Cavalo(self.player1)
+        self.pecas[7][0] = Torre(self.player1)
 
         for i in range(8):
-            self.pecas[i][6] = Peao(player2)
-        self.pecas[0][7] = Torre(player2)
-        self.pecas[1][7] = Cavalo(player2)
-        self.pecas[2][7] = Bispo(player2)
-        self.pecas[3][7] = Rainha(player2)
-        self.pecas[4][7] = Rei(player2)
-        self.pecas[5][7] = Bispo(player2)
-        self.pecas[6][7] = Cavalo(player2)
-        self.pecas[7][7] = Torre(player2)
+            self.pecas[i][6] = Peao(self.player2)
+        self.pecas[0][7] = Torre(self.player2)
+        self.pecas[1][7] = Cavalo(self.player2)
+        self.pecas[2][7] = Bispo(self.player2)
+        self.pecas[3][7] = Rainha(self.player2)
+        self.pecas[4][7] = Rei(self.player2)
+        self.pecas[5][7] = Bispo(self.player2)
+        self.pecas[6][7] = Cavalo(self.player2)
+        self.pecas[7][7] = Torre(self.player2)
 
     def possiveisMovimentos(self):
         l = []
         for i in range(8):
             for j in range(8):
-                if self.pecas[i][j] is not None:
-                    l = l + self.pecas[i][j].movimentosPossiveis((i, j), self)
+                l=l+self.pecaPossiveisMovimentos((i,j))
         return l
 
+    def xequeMate(self,jogador1):
+        return self.jogadorPossiveisMovimentos(jogador1)==[]
+
+    def jogadorPossiveisMovimentos(self,jogador):
+        l=self.possiveisMovimentos()
+        aux=[]
+        for i in l:
+            pos=i[0][1]
+            (posx,posy)=pos
+            if(self.pecas[posx][posy].jogador==jogador):
+                aux.append(i)
+        return aux
     def pecaPossiveisMovimentos(self, posicao):
         (i, j) = posicao
         if self.pecas[i][j] is not None:
-            return self.pecas[i][j].movimentosPossiveis((i, j), self)
+            meuTipo=self.pecas[i][j].tipo()
+            l=self.pecas[i][j].movimentosPossiveis((i, j), self)
+            print("Movimentos antes do tratamento : " + str(l))
+            posicaoMeuRei=self.posicaoReis[self.pecas[i][j].jogador]
+            meuRei=self.pecas[posicaoMeuRei[0]][posicaoMeuRei[1]]
+            aux=[]
+            for jogada in l:
+                self.falsoMovimento(jogada[0][1],jogada[0][2])
+                if(meuTipo != 'rei' and not meuRei.estouEmXeque(posicaoMeuRei,self)):
+                    aux.append(jogada)
+                if(meuTipo == 'rei' and not meuRei.estouEmXeque(jogada[0][2],self)):
+                    aux.append(jogada)
+                self.reset()
+            return aux
         return []
 
     def tipoPecaNaPosicao(self, posicao):
@@ -103,14 +127,21 @@ class Tabuleiro:
         elif(self.pecas[xf][yf].tipo() == 'rei'):
             self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
+            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
             
 
     def falsoMovimento(self, posicao1, posicao2):
-        self.pilha.append(deepcopy(self.pecas))
+        self.pilha.append((self.pecas,self.posicaoReis))
+        self.pecas=deepcopy(self.pecas)
+        self.posicaoReis={}
+        for i in range(8):
+            for j in range(8):
+                if(self.pecas[i][j] is not None and self.pecas[i][j].tipo=='rei'):
+                    self.posicaoReis[self.pecas[i][j].jogador]=(i,j)
         self.move(posicao1, posicao2)
 
     def reset(self):
-        self.pecas = self.pilha[-1]
+        (self.pecas,self.posicaoReis) = self.pilha[-1]
         self.pilha = self.pilha[0:-1]
 
     def __str__(self):
