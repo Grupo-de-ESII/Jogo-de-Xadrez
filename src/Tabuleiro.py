@@ -43,6 +43,18 @@ class Tabuleiro:
                 l=l+self.pecaPossiveisMovimentos((i,j))
         return l
 
+    def xequeMate(self,jogador1):
+        return self.jogadorPossiveisMovimentos(jogador1)==[]
+
+    def jogadorPossiveisMovimentos(self,jogador):
+        l=self.possiveisMovimentos()
+        aux=[]
+        for i in l:
+            pos=i[0][1]
+            (posx,posy)=pos
+            if(self.pecas[posx][posy].jogador==jogador):
+                aux.append(i)
+        return aux
     def pecaPossiveisMovimentos(self, posicao):
         (i, j) = posicao
         if self.pecas[i][j] is not None:
