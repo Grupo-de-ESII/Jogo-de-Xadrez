@@ -43,8 +43,9 @@ class Tabuleiro:
                 l=l+self.pecaPossiveisMovimentos((i,j))
         return l
 
-    def xequeMate(self,jogador1):
-        return self.jogadorPossiveisMovimentos(jogador1)==[]
+    def xequeMate(self, cor):
+        #BRANCAS = 1 ; PRETAS = 2
+        return self.jogadorPossiveisMovimentos(Jogador('branca' if cor==1 else 'preta'))==[]
 
     def jogadorPossiveisMovimentos(self,jogador):
         l=self.possiveisMovimentos()
@@ -52,7 +53,7 @@ class Tabuleiro:
         for i in l:
             pos=i[0][1]
             (posx,posy)=pos
-            if(self.pecas[posx][posy].jogador==jogador):
+            if(self.pecas[posx][posy].jogador.cor==jogador.cor):
                 aux.append(i)
         return aux
     def pecaPossiveisMovimentos(self, posicao):
@@ -60,7 +61,7 @@ class Tabuleiro:
         if self.pecas[i][j] is not None:
             meuTipo=self.pecas[i][j].tipo()
             l=self.pecas[i][j].movimentosPossiveis((i, j), self)
-            print("Movimentos antes do tratamento : " + str(l))
+#            print("Movimentos antes do tratamento : " + str(l))
             posicaoMeuRei=self.posicaoReis[self.pecas[i][j].jogador]
             meuRei=self.pecas[posicaoMeuRei[0]][posicaoMeuRei[1]]
             aux=[]
@@ -127,7 +128,7 @@ class Tabuleiro:
         elif(self.pecas[xf][yf].tipo() == 'rei'):
             self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
-            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
+#            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
             
 
     def falsoMovimento(self, posicao1, posicao2):
