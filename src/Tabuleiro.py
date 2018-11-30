@@ -152,3 +152,5 @@ class Tabuleiro:
                 s=s+" " + str(self.pecas[i][j].tipo() if self.pecas[i][j] is not None else "    ")
             s=s+"\n"
         return s
+    def jogadaSimples(self,jogada):
+        pass
