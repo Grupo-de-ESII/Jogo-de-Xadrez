@@ -34,10 +34,11 @@ class uiBlocoVerde(object):
 ##########################################################################
 
 # info
-LARGURA = 900
+LARGURA = 840
 ALTURA = 600
 L = ALTURA // 10  # Unidadade mínima da tela, L = lado de um quadrado do tabuleiro
 TURNO = 1
+VS_IA = False
 
 # Cores
 BRANCO = [255,255,255]
@@ -53,8 +54,9 @@ TELA_INTRO = 1;
 TELA_MENU = 2;
 TELA_OPCOES = 3;
 TELA_JOGO = 4;
-MOVIMENTO_JOGADOR = 5;
-TELA_FIM = 6;
+TELA_JOGO2 = 5;
+MOVIMENTO_JOGADOR = 6;
+TELA_FIM = 7;
 
 #imagens de fundo
 imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
@@ -63,6 +65,22 @@ imagem_opcoes = pygame.image.load("Ativos/opcoes_menu.png")
 imagem_tabuleiro = pygame.image.load("Ativos/tabuleiromadeira.png")
 
 #auxiliares
+def limpa_jogo():
+    global pecasPretas
+    global pecasBrancas
+    global pecasJogador1Capturadas
+    global pecasJogador2Capturadas
+    global blocosVerdes
+    global mensagem
+    global TURNO
+    pecasPretas = []
+    pecasBrancas = []
+    pecasJogador1Capturadas = []
+    pecasJogador2Capturadas = []
+    blocosVerdes = []
+    mensagem = None
+    TURNO = 1
+
 def postela2str(d, posicao): #Posicao da tela para A1...H8
     for i in d:
         pos = d[i]
@@ -159,7 +177,7 @@ def desenha_opcoes(tela):
     pygame.display.update() # atualiza a tela com tudo que foi feito
     fonte_texto = pygame.font.Font("Ativos/Comical Smash.ttf", 60)
     texto_pecas = fonte_texto.render('Pecas:  Pretas X Brancas', True, cor_texto, cor_fundo)
-    texto_dificuldade = fonte_texto.render('Dificuldade:  Facil x Dificil', True, cor_texto, cor_fundo)
+    texto_dificuldade = fonte_texto.render('Versus:  Jogador x IA', True, cor_texto, cor_fundo)
     texto_voltar = fonte_texto.render('Voltar', True, cor_texto, cor_fundo)
     rect_pecas = texto_pecas.get_rect()
     rect_dificuldade = texto_dificuldade.get_rect()
@@ -346,7 +364,7 @@ def interface():
     jogador2=PRETAS
 
     #funcao
-    tab=Tabuleiro() #jogador 1 é branco, 2 é preto
+    tab=0 #jogador 1 é branco, 2 é preto
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
 
@@ -377,29 +395,25 @@ def interface():
     mensagem = None
     running = True
     global TURNO
+    global VS_IA
+    VS_IA = False
 
     while running:
         key = pygame.key.get_pressed()
-
         if key[pygame.K_ESCAPE]:
             running = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if estado == TELA_INICIO:
-                if event.type == pygame.KEYDOWN:
-                    #eletricidade(LARGURA, ALTURA, tela)
-                    #estado = 1
-                    estado = TELA_MENU
-                    desenha_menu2(tela,estado)
-
             if estado == TELA_INTRO or estado == TELA_MENU: #estado 3 precisa ser removido daqui ou acertado
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
                     print(pos) #usado para debugar
                     if ((pos[0]>= 332 and pos[0]<= 569.5) and (pos[1] >= 168 and pos[1] <= 220)): #detecta "JOGAR"
-                        estado = TELA_JOGO
-
+                        if not VS_IA:
+                            estado = TELA_JOGO
+                        elif VS_IA:
+                            estado = TELA_JOGO2
                         # def __init__(self, posicao, tam, tipo):
                         if (jogador1 == BRANCAS):
                             uiPecaPreto(dic["A7"], L, "peao")
@@ -478,6 +492,7 @@ def interface():
                         desenha_opcoes(tela)
                     if ((pos[0]>= 370.5 and pos[0]<= 529.5) and (pos[1] >= 336 and pos[1] <= 392)): #detecta "SAIR"
                           running = False
+                    continue #Evitar que o mesmo evento ocorra para telas diferentes
 
             if estado == TELA_OPCOES:
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -491,6 +506,12 @@ def interface():
                         jogador1 = BRANCAS
                         jogador2 = PRETAS
                         print("BRANCAS")
+                    if ((pos[0]>= 387.5 and pos[0]<= 626) and (pos[1] >= 253 and pos[1] <= 302)): #detecta "JOGADOR"
+                        print("JOGADOR")
+                        VS_IA = False
+                    if ((pos[0]>= 696 and pos[0]<= 751) and (pos[1] >= 253 and pos[1] <= 302)): #detecta "IA"
+                        print("IA")
+                        VS_IA = True
                     if ((pos[0]>= 355.5 and pos[0]<= 545.5) and (pos[1] >= 336 and pos[1] <= 385)): #detecta "VOLTAR"
                         estado = TELA_MENU
                         desenha_menu2(tela,estado)
@@ -500,8 +521,8 @@ def interface():
                 desenha_tabuleiro(tela, TELA_FIM, mensagem)
                 #jogo_terminado(tela, )
                 if event.type == pygame.MOUSEBUTTONUP:
-                    #reiniciar o jogo
-                    running = False
+                    limpa_jogo()
+                    estado = TELA_INICIO
 
             if estado == MOVIMENTO_JOGADOR:
                 global blocosVerdes
@@ -553,7 +574,10 @@ def interface():
                             print("fez movimento")
                             #Passou a vez = TRUE <- Falta algo assim, se necessário
                             blocosVerdes = []
-                            estado = TELA_JOGO
+                            if VS_IA:
+                                estado = TELA_JOGO2
+                            else:
+                                estado = TELA_JOGO
                             desenha_tabuleiro(tela, estado, mensagem)
 
                         #Cancelar Movimento
@@ -563,7 +587,7 @@ def interface():
                             estado = TELA_JOGO
                             desenha_tabuleiro(tela, estado, mensagem)
 
-            if estado == TELA_JOGO:
+            if estado == TELA_JOGO or estado == TELA_JOGO2:
                 if TURNO == jogador1 and tab.xequeMate(jogador1):
                     print("JOGO ACABOU 1 PERDEU")
                     #terminaJogo Jogador 1 venceu
@@ -574,22 +598,25 @@ def interface():
                     estado = TELA_FIM
 
             if estado == TELA_JOGO:
-                # (x[0] // 60 * 60, x[1] // 60 * 60)
+                if key[pygame.K_v]:
+                    limpa_jogo()
+                    estado = TELA_INICIO
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
                     pos_peca = posNorm(pos) #Converte para um quadrado da tela -> Ex: 362x63 -> 360x60
                     for peca in pecasPretas:
                         if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
                             if (TURNO == PRETAS):
-                                estado = MOVIMENTO_JOGADOR
+                                eValido = False
                                 if jogador1 == PRETAS:
-                                    criaBlkVerdes(dic, pos_peca, tab,
-                                                  True)  # Boolean -> se tabuleiro está invertido
+                                    eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                    True)  # Boolean -> se tabuleiro está invertido
                                 else:
-                                    criaBlkVerdes(dic, pos_peca, tab,
-                                                  False)  # Boolean -> se tabuleiro não está invertido
-
-                                pecaEspecial[0] = peca
+                                    eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                    False)  # Boolean -> se tabuleiro não está invertido
+                                if eValido:
+                                    estado = MOVIMENTO_JOGADOR
+                                    pecaEspecial[0] = peca
 
                             print(peca)
                             print(peca.tipo)
@@ -614,6 +641,69 @@ def interface():
 
                     desenha_tabuleiro(tela, estado, mensagem)
 
+            if estado == TELA_JOGO2:
+                if key[pygame.K_v]:
+                    limpa_jogo()
+                    estado = TELA_INICIO
+                if TURNO == jogador1:
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        pos = pygame.mouse.get_pos()
+                        pos_peca = posNorm(pos) #Converte para um quadrado da tela -> Ex: 362x63 -> 360x60
+                        for peca in pecasPretas:
+                            if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
+                                if (TURNO == PRETAS):
+                                    eValido = False
+                                    if jogador1 == PRETAS:
+                                        eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                        True)  # Boolean -> se tabuleiro está invertido
+                                    else:
+                                        eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                        False)  # Boolean -> se tabuleiro não está invertido
+                                    if eValido:
+                                        estado = MOVIMENTO_JOGADOR
+                                        pecaEspecial[0] = peca
+
+                                print(peca)
+                                print(peca.tipo)
+
+                        for peca in pecasBrancas:
+                            if peca.rect.x == pos_peca[0] and peca.rect.y == pos_peca[1]:
+                                if (TURNO == BRANCAS):
+                                    eValido = False
+                                    if jogador1 == PRETAS:
+                                        eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                      True) #Boolean -> se tabuleiro está invertido
+                                    else:
+                                        eValido = criaBlkVerdes(dic, pos_peca, tab,
+                                                      False)  # Boolean -> se tabuleiro não está invertido
+
+                                    if eValido:
+                                        estado = MOVIMENTO_JOGADOR
+                                        pecaEspecial[0] = peca #Salva peça de interesse, para realizar a movimentação
+
+                                print(peca)
+                                print(peca.tipo)
+
+                        desenha_tabuleiro(tela, estado, mensagem)
+
+                elif TURNO == jogador2:
+                    #integração com a IA
+                    #if jogador2 == PRETAS: #tabuleiro não invertido
+                        #faz movimento
+                    #    TURNO == jogador1
+
+                    #else: #tabuleiro invertido
+
+                    desenha_tabuleiro(tela, estado, mensagem)
+                    print("Exit 1 - Ainda não há integracao com a IA")
+                    running = False
+
+            if estado == TELA_INICIO:
+                if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONUP or key[pygame.K_v]:
+                    #eletricidade(LARGURA, ALTURA, tela)
+                    tab=Tabuleiro()
+                    estado = TELA_MENU
+                    desenha_menu2(tela,estado)
 
     pygame.display.quit()
     pygame.quit()
