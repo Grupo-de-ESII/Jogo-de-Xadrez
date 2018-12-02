@@ -64,8 +64,10 @@ class Tabuleiro:
 #            print("Movimentos antes do tratamento : " + str(l))
             posicaoMeuRei=self.posicaoReis[self.pecas[i][j].jogador]
             meuRei=self.pecas[posicaoMeuRei[0]][posicaoMeuRei[1]]
+            print("MeuRei vale : " + str(meuRei))
             aux=[]
             for jogada in l:
+                print("Meu debug : " + str(meuRei))
                 self.falsoMovimento(jogada[0][1],jogada[0][2])
                 if(meuTipo != 'rei' and not meuRei.estouEmXeque(posicaoMeuRei,self)):
                     aux.append(jogada)
@@ -132,17 +134,19 @@ class Tabuleiro:
             
 
     def falsoMovimento(self, posicao1, posicao2):
-        self.pilha.append((self.pecas,self.posicaoReis))
-        self.pecas=deepcopy(self.pecas)
-        self.posicaoReis={}
-        for i in range(8):
-            for j in range(8):
-                if(self.pecas[i][j] is not None and self.pecas[i][j].tipo=='rei'):
-                    self.posicaoReis[self.pecas[i][j].jogador]=(i,j)
+        peca1=deepcopy(self.pecas[posicao1[0]][posicao1[1]])
+        if peca1 is not None:
+             peca1.jogador=self.pecas[posicao1[0]][posicao1[1]].jogador
+        peca2=deepcopy(self.pecas[posicao2[0]][posicao2[1]])
+        if peca2 is not None:
+             peca2.jogador=self.pecas[posicao2[0]][posicao2[1]].jogador
+        self.pilha.append(((posicao1,peca1),(posicao2,peca2)))
         self.move(posicao1, posicao2)
 
     def reset(self):
-        (self.pecas,self.posicaoReis) = self.pilha[-1]
+        ((posicao1,peca1),(posicao2,peca2)) = self.pilha[-1]
+        self.pecas[posicao1[0]][posicao1[1]]=peca1
+        self.pecas[posicao2[0]][posicao2[1]]=peca2
         self.pilha = self.pilha[0:-1]
 
     def __str__(self):
