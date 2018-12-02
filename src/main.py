@@ -1,25 +1,13 @@
-import Tabuleiro,Jogador
-
 from IA import *
+from Tabuleiro import *
 import time
 
-#dont polute here with a lot of global variables.
-#make KISS, create a class with constants if needed
 
-
-#I don't need to say that to Luis or Julia, but Wallace,
-#dont do mess
-
-
-#import GRAPHICS_THING
-
-#graphics init
-
-
-ia = IA()
+tabuleiro = Tabuleiro()
+ia = IA(tabuleiro)
 
 ti = time.clock()
-ia.get_melhor_jogada(True)
+ia.get_melhor_jogada(3, True)
 print(time.clock() - ti)
 
 

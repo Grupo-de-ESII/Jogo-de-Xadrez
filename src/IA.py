@@ -11,24 +11,24 @@ JOGADA_PARA = 2
 
 class IA:
 
-	def __init__(self):
+	def __init__(self, tabuleiro):
 		# Inicializa tabuleiro
-		self.tabuleiro = Tabuleiro()
+		self.tabuleiro = tabuleiro
 
-		self.jogador_1 = Jogador('branca')
-		self.jogador_2 = Jogador('preta')
+		self.jogador_1 = tabuleiro.player1
+		self.jogador_2 = tabuleiro.player2
 
 		# Pesos das peças pra usar na heurística
 		self.pesos = {'peao': 1, 'cavalo': 3, 'bispo': 3, 'torre': 5, 'rainha': 9, 'rei': 90, '': 0}
 
-	def get_melhor_jogada(self, jogador1):
+	def get_melhor_jogada(self, profundidade, jogador1):
 		jogadas = self.get_jogadas_possiveis()
 
 		melhor_valor = -sys.maxsize - 1  # Menor inteiro
 		melhor_jogada = None
 
 		for jogada in jogadas:
-			valor_jogada = self.minimax(1, jogador1)
+			valor_jogada = self.minimax(profundidade - 1, jogador1)
 
 			if valor_jogada > melhor_valor:
 				melhor_valor = valor_jogada
