@@ -288,15 +288,17 @@ class Peao:
 			and not tabuleiro.temPecaNaPosicao((x,y+2*incrementoPlayer)):
 				l.append([['peao',posicao,(x,y+2*incrementoPlayer)]])
 		#mover para frente
-		if(not tabuleiro.temPecaNaPosicao((x,y+incrementoPlayer))):
+		if( 0<=y+incrementoPlayer<=7 and not tabuleiro.temPecaNaPosicao((x,y+incrementoPlayer))):
 			l.append([['peao',posicao,(x,y+incrementoPlayer)]])
 		#captura para a direita
-		if(tabuleiro.temPecaNaPosicao((x+incrementoPlayer,y+incrementoPlayer))\
+		if(0<=x+incrementoPlayer<=7 and 0<=y+incrementoPlayer<=7 \
+		and tabuleiro.temPecaNaPosicao((x+incrementoPlayer,y+incrementoPlayer))\
 		   and tabuleiro.playerPecaNaPosicao((x+incrementoPlayer,y+incrementoPlayer)) != self.jogador):
 			l.append([['peao',posicao,(x+incrementoPlayer,y+incrementoPlayer)]])
 
 		#captura para a esquerda
-		if(tabuleiro.temPecaNaPosicao((x-incrementoPlayer,y+incrementoPlayer))\
+		if(0<=x-incrementoPlayer<=7 and 0<=y+incrementoPlayer<=7
+		   and tabuleiro.temPecaNaPosicao((x-incrementoPlayer,y+incrementoPlayer))\
 		   and tabuleiro.playerPecaNaPosicao((x-incrementoPlayer,y+incrementoPlayer)) != self.jogador):
 			l.append([['peao',posicao,(x-incrementoPlayer,y+incrementoPlayer)]])
 		return l
