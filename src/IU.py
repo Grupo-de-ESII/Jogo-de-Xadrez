@@ -2,6 +2,7 @@ import pygame
 
 #temporario --------------------------------------------------------
 from Tabuleiro import *
+from IA import*
 #from Tabuleiro.Tabuleiro import Tabuleiro
 
 pecasPretas = []
@@ -365,6 +366,7 @@ def interface():
 
     #funcao
     tab=0 #jogador 1 é branco, 2 é preto
+    computador=0
     tela = pygame.display.set_mode((LARGURA,ALTURA)) #define tamanho da tela
     pygame.display.set_caption('Xadrez') #define título para tela
 
@@ -414,6 +416,7 @@ def interface():
                             estado = TELA_JOGO
                         elif VS_IA:
                             estado = TELA_JOGO2
+                            computador = IA(tab)
                         # def __init__(self, posicao, tam, tipo):
                         if (jogador1 == BRANCAS):
                             uiPecaPreto(dic["A7"], L, "peao")
@@ -688,15 +691,55 @@ def interface():
 
                 elif TURNO == jogador2:
                     #integração com a IA
-                    #if jogador2 == PRETAS: #tabuleiro não invertido
+                    pecaEspecial2 = [None, None]
+                    jogada = 0
+                    if jogador2 == PRETAS: #tabuleiro não invertido
                         #faz movimento
-                    #    TURNO == jogador1
+                        jogada = computador.get_melhor_jogada(2, False)
+                        pos_tab = dic[tab.matrix2str(jogada[0][1])]
+                        pos_tab2 = dic[tab.matrix2str(jogada[0][2])]
+                        for peca in pecasPretas:
+                            if peca.rect.x == pos_tab[0] and peca.rect.y == pos_tab[1]:
+                                pecaEspecial[0] = peca
+                                break
+                        for pecas in pecasBrancas:
+                            if pecas.rect.x == pos_tab2[0] and pecas.rect.y == pos_tab2[1]:
+                                pecaEspecial2[0] = pecas
+                                print("oi")
+                                pecasJogador1Capturadas.append(pecaEspecial2[0])
+                                pecasBrancas.remove(pecaEspecial2[0])
+                                print(pecasJogador1Capturadas)
+                                print(pecasBrancas)
+                                break
+
+                    else:
+                        jogada = computador.get_melhor_jogada(2, True)
+                        dicionario = generateInvDic(dic)
+                        pos_tab = dicionario[tab.matrix2str(jogada[0][1])]
+                        pos_tab2 = dicionario[tab.matrix2str(jogada[0][2])]
+                        for peca in pecasBrancas:
+                            if peca.rect.x == pos_tab[0] and peca.rect.y == pos_tab[1]:
+                                pecaEspecial[0] = peca
+                                break
+                        for pecas in pecasPretas:
+                            if pecas.rect.x == pos_tab2[0] and pecas.rect.y == pos_tab2[1]:
+                                pecaEspecial2[0] = pecas
+                                print("oi")
+                                pecasJogador1Capturadas.append(pecaEspecial2[0])
+                                pecasPretas.remove(pecaEspecial2[0])
+                                print(pecasJogador1Capturadas)
+                                print(pecasPretas)
+                                break
+
+                    pecaEspecial2[0] = None
+                    tab.move(jogada[0][1], jogada[0][2])
+                    mover_peca(tela, pecaEspecial[0], pos_tab2)
+                    TURNO = jogador1
 
                     #else: #tabuleiro invertido
 
                     desenha_tabuleiro(tela, estado, mensagem)
-                    print("Exit 1 - Ainda não há integracao com a IA")
-                    running = False
+
 
             if estado == TELA_INICIO:
                 if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONUP or key[pygame.K_v]:

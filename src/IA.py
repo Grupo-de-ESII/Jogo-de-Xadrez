@@ -11,24 +11,24 @@ JOGADA_PARA = 2
 
 class IA:
 
-	def __init__(self):
+	def __init__(self, tabuleiro):
 		# Inicializa tabuleiro
-		self.tabuleiro = Tabuleiro()
+		self.tabuleiro = tabuleiro
 
-		self.jogador_1 = Jogador('branca')
-		self.jogador_2 = Jogador('preta')
+		self.jogador_1 = tabuleiro.player1
+		self.jogador_2 = tabuleiro.player2
 
 		# Pesos das peças pra usar na heurística
 		self.pesos = {'peao': 1, 'cavalo': 3, 'bispo': 3, 'torre': 5, 'rainha': 9, 'rei': 90, '': 0}
 
-	def get_melhor_jogada(self, jogador1):
-		jogadas = self.get_jogadas_possiveis()
+	def get_melhor_jogada(self, profundidade, maximizando_player1):
+		jogadas = self.get_jogadas_possiveis(maximizando_player1)
 
 		melhor_valor = -sys.maxsize - 1  # Menor inteiro
 		melhor_jogada = None
 
 		for jogada in jogadas:
-			valor_jogada = self.minimax(1, jogador1)
+			valor_jogada = self.minimax(profundidade - 1, maximizando_player1)
 
 			if valor_jogada > melhor_valor:
 				melhor_valor = valor_jogada
@@ -36,15 +36,24 @@ class IA:
 
 		return melhor_jogada
 
-	def get_jogadas_possiveis(self):
-		return self.tabuleiro.possiveisMovimentos()
+	def get_jogadas_possiveis(self, maximizando_player1):
+		jogadas_possiveis = self.tabuleiro.possiveisMovimentos()
+		jogadas_jogador = []
+
+		for jogada in jogadas_possiveis:
+			xi, yi = jogada[0][1]
+
+			if self.tabuleiro.pecas[xi][yi].jogador == (self.jogador_1 if maximizando_player1 else self.jogador_2):
+				jogadas_jogador.append(jogada)
+
+		return jogadas_jogador
 
 	def minimax(self, profundidade, maximizando_player1):
 		# Limite da profundidade atingido
 		if profundidade == 0:  # TODO: Ou jogada é final
 			return self.avalia_tabuleiro(maximizando_player1)
 
-		jogadas = self.get_jogadas_possiveis()
+		jogadas = self.get_jogadas_possiveis(maximizando_player1)
 		if maximizando_player1:
 			melhor_valor = -sys.maxsize - 1  # Menor inteiro
 
