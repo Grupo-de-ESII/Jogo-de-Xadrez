@@ -705,11 +705,8 @@ def interface():
                         for pecas in pecasBrancas:
                             if pecas.rect.x == pos_tab2[0] and pecas.rect.y == pos_tab2[1]:
                                 pecaEspecial2[0] = pecas
-                                print("oi")
                                 pecasJogador1Capturadas.append(pecaEspecial2[0])
                                 pecasBrancas.remove(pecaEspecial2[0])
-                                print(pecasJogador1Capturadas)
-                                print(pecasBrancas)
                                 break
 
                     else:
@@ -724,11 +721,8 @@ def interface():
                         for pecas in pecasPretas:
                             if pecas.rect.x == pos_tab2[0] and pecas.rect.y == pos_tab2[1]:
                                 pecaEspecial2[0] = pecas
-                                print("oi")
                                 pecasJogador1Capturadas.append(pecaEspecial2[0])
                                 pecasPretas.remove(pecaEspecial2[0])
-                                print(pecasJogador1Capturadas)
-                                print(pecasPretas)
                                 break
 
                     pecaEspecial2[0] = None
@@ -745,6 +739,7 @@ def interface():
                 if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONUP or key[pygame.K_v]:
                     #eletricidade(LARGURA, ALTURA, tela)
                     tab=Tabuleiro()
+                    computador=IA(tab)
                     estado = TELA_MENU
                     desenha_menu2(tela,estado)
 
