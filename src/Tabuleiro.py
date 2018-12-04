@@ -42,7 +42,33 @@ class Tabuleiro:
             for j in range(8):
                 l=l+self.pecaPossiveisMovimentos((i,j))
         return l
-
+    
+    #baseado em http://soxadrez.com.br/conteudos/fases_partida/
+    def empate(self):
+        return self.afogamento() or self.xequePerpetuo() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
+    def afogamento(self):
+        return True
+    def xequePerpetuo(self):
+        return True
+    def tresPosicoes(self):
+        return True
+    def cinquentaMovimentos(self):
+        return True
+    def insuficienciaMaterial(self):
+        hash1={}
+        hash2={}
+        for i in range(8):
+            for j in range(8):
+                if self.pecas[i][j] is not None:
+                    if(self.pecas[i][j].jogador==self.player1:
+                        hash1[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash1 else hash1[self.pecas[i][j].tipo()]+1
+                    else:
+                        hash2[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash2 else hash2[self.pecas[i][j].tipo()]+1
+        l1=hash1.keys()
+        l2=hash2.keys()
+        p1Suficiente=('rei' in l1 and 'rainha' in l1) or ('rei' in l1 and 'torre' in l1) or ('rei' in l1 and 'bispo' in l1 and 'cavalo' in l1) or ('rei' in l1 and 'bispo' in l1 and hash1['bispo'] == 2)
+        p2Suficiente=('rei' in l2 and 'rainha' in l2) or ('rei' in l2 and 'torre' in l2) or ('rei' in l2 and 'bispo' in l2 and 'cavalo' in l2) or ('rei' in l2 and 'bispo' in l2 and hash2['bispo'] == 2)
+        return not (p1Suficiente and p2Suficiente)
     def xequeMate(self, cor):
         #BRANCAS = 1 ; PRETAS = 2
         return self.jogadorPossiveisMovimentos(Jogador('branca' if cor==1 else 'preta'))==[]
