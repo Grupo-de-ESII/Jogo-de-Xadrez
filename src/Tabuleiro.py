@@ -45,8 +45,8 @@ class Tabuleiro:
         return l
     
     #baseado em http://soxadrez.com.br/conteudos/fases_partida/
-    def empate(self):
-        return self.afogamento() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
+    def empate(self,vezDe):
+        return self.afogamento(vezDe) or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
     def afogamento(self,vezDe):
         return self.jogadorPossiveisMovimentos(vezDe) == []
     def tresPosicoes(self):
@@ -157,7 +157,6 @@ class Tabuleiro:
         if self.pecas[xf][yf].tipo() == 'peao' or backup is not None:
             self.contadorRodadas=-1 #quando incrementar ali embaixo vira 0
         self.contadorRodadas=self.contadorRodadas+1
-            
 
     def falsoMovimento(self, posicao1, posicao2):
         self.pilha.append((self.pecas,self.posicaoReis,self.contadorRodadas))
