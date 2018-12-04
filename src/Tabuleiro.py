@@ -45,10 +45,8 @@ class Tabuleiro:
     
     #baseado em http://soxadrez.com.br/conteudos/fases_partida/
     def empate(self):
-        return self.afogamento() or self.xequePerpetuo() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
+        return self.afogamento() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
     def afogamento(self):
-        return False
-    def xequePerpetuo(self):
         return False
     def tresPosicoes(self):
         return False
