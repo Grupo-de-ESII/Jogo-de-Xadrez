@@ -35,6 +35,7 @@ class Tabuleiro:
         self.pecas[5][7] = Bispo(self.player2)
         self.pecas[6][7] = Cavalo(self.player2)
         self.pecas[7][7] = Torre(self.player2)
+        self.contadorRodadas=0
 
     def possiveisMovimentos(self):
         l = []
@@ -46,12 +47,12 @@ class Tabuleiro:
     #baseado em http://soxadrez.com.br/conteudos/fases_partida/
     def empate(self):
         return self.afogamento() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
-    def afogamento(self):
-        return False
+    def afogamento(self,vezDe):
+        return self.jogadorPossiveisMovimentos(vezDe) == []
     def tresPosicoes(self):
         return False
     def cinquentaMovimentos(self):
-        return False
+        return self.contadorRodadas >= 50
     def insuficienciaMaterial(self):
         hash1={}
         hash2={}
@@ -146,13 +147,16 @@ class Tabuleiro:
         (xf, yf) = posicao2
         tmp = self.pecas[xi][yi]
         self.pecas[xi][yi] = None
+        backup=self.pecas[xf][yf]
         self.pecas[xf][yf] = tmp
         if(self.pecas[xf][yf].tipo() == 'peao'):
             self.pecas[xf][yf].primeiroMovimento=False
         elif(self.pecas[xf][yf].tipo() == 'rei'):
             self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
-#            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
+        if self.pecas[xf][yf].tipo() == 'peao' or backup is not None:
+            self.contadorRodadas=-1 #quando incrementar ali embaixo vira 0
+        self.contadorRodadas=self.contadorRodadas+1
             
 
     def falsoMovimento(self, posicao1, posicao2):
@@ -168,6 +172,7 @@ class Tabuleiro:
     def reset(self):
         (self.pecas,self.posicaoReis) = self.pilha[-1]
         self.pilha = self.pilha[0:-1]
+        self.contadorRodadas=self.contadorRodadas-1
 
     def __str__(self):
         s=""
