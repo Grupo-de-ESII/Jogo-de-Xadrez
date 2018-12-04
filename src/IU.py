@@ -58,6 +58,7 @@ TELA_JOGO = 4;
 TELA_JOGO2 = 5;
 MOVIMENTO_JOGADOR = 6;
 TELA_FIM = 7;
+TELA_VERIFICACAO = 8;
 
 #imagens de fundo
 imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
@@ -577,10 +578,7 @@ def interface():
                             print("fez movimento")
                             #Passou a vez = TRUE <- Falta algo assim, se necessário
                             blocosVerdes = []
-                            if VS_IA:
-                                estado = TELA_JOGO2
-                            else:
-                                estado = TELA_JOGO
+                            estado = TELA_VERIFICACAO
                             desenha_tabuleiro(tela, estado, mensagem)
 
                         #Cancelar Movimento
@@ -590,15 +588,19 @@ def interface():
                             estado = TELA_JOGO
                             desenha_tabuleiro(tela, estado, mensagem)
 
-            if estado == TELA_JOGO or estado == TELA_JOGO2:
-                if TURNO == jogador1 and tab.xequeMate(jogador1):
-                    print("JOGO ACABOU 1 PERDEU")
+            if estado == TELA_VERIFICACAO:
+                if TURNO == jogador2 and tab.xequeMate(jogador2):
+                    print("JOGO ACABOU 1 GANHOU")
                     #terminaJogo Jogador 1 venceu
                     estado = TELA_FIM
-                elif TURNO == jogador2 and tab.xequeMate(jogador2):
-                    print("JOGO ACABOU 2 PERDEU")
+                elif TURNO == jogador1 and tab.xequeMate(jogador1):
+                    print("JOGO ACABOU 2 GANHOU")
                     #terminaJogo Jogador 2 venceu
                     estado = TELA_FIM
+                elif VS_IA:
+                    estado = TELA_JOGO2
+                else:
+                    estado = TELA_JOGO
 
             if estado == TELA_JOGO:
                 if key[pygame.K_v]:
@@ -729,6 +731,7 @@ def interface():
                     tab.move(jogada[0][1], jogada[0][2])
                     mover_peca(tela, pecaEspecial[0], pos_tab2)
                     TURNO = jogador1
+                    estado = TELA_VERIFICACAO
 
                     #else: #tabuleiro invertido
 
