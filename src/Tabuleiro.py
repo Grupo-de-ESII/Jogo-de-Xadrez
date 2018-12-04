@@ -47,13 +47,13 @@ class Tabuleiro:
     def empate(self):
         return self.afogamento() or self.xequePerpetuo() or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
     def afogamento(self):
-        return True
+        return False
     def xequePerpetuo(self):
-        return True
+        return False
     def tresPosicoes(self):
-        return True
+        return False
     def cinquentaMovimentos(self):
-        return True
+        return False
     def insuficienciaMaterial(self):
         hash1={}
         hash2={}
@@ -68,7 +68,7 @@ class Tabuleiro:
         l2=hash2.keys()
         p1Suficiente=('rei' in l1 and 'rainha' in l1) or ('rei' in l1 and 'torre' in l1) or ('rei' in l1 and 'bispo' in l1 and 'cavalo' in l1) or ('rei' in l1 and 'bispo' in l1 and hash1['bispo'] == 2)
         p2Suficiente=('rei' in l2 and 'rainha' in l2) or ('rei' in l2 and 'torre' in l2) or ('rei' in l2 and 'bispo' in l2 and 'cavalo' in l2) or ('rei' in l2 and 'bispo' in l2 and hash2['bispo'] == 2)
-        return not (p1Suficiente and p2Suficiente)
+        return not (p1Suficiente or p2Suficiente)
     def xequeMate(self, cor):
         #BRANCAS = 1 ; PRETAS = 2
         return self.jogadorPossiveisMovimentos(Jogador('branca' if cor==1 else 'preta'))==[]
