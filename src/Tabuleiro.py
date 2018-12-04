@@ -160,7 +160,7 @@ class Tabuleiro:
             
 
     def falsoMovimento(self, posicao1, posicao2):
-        self.pilha.append((self.pecas,self.posicaoReis))
+        self.pilha.append((self.pecas,self.posicaoReis,self.contadorRodadas))
         self.pecas=deepcopy(self.pecas)
         self.posicaoReis={}
         for i in range(8):
@@ -170,9 +170,8 @@ class Tabuleiro:
         self.move(posicao1, posicao2)
 
     def reset(self):
-        (self.pecas,self.posicaoReis) = self.pilha[-1]
+        (self.pecas,self.posicaoReis,self.contadorRodadas) = self.pilha[-1]
         self.pilha = self.pilha[0:-1]
-        self.contadorRodadas=self.contadorRodadas-1
 
     def __str__(self):
         s=""
