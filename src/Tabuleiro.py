@@ -137,7 +137,7 @@ class Tabuleiro:
         self.posicaoReis={}
         for i in range(8):
             for j in range(8):
-                if(self.pecas[i][j] is not None and self.pecas[i][j].tipo=='rei'):
+                if((self.pecas[i][j] is not None) and self.pecas[i][j].tipo()=='rei'):
                     self.posicaoReis[self.pecas[i][j].jogador]=(i,j)
         self.move(posicao1, posicao2)
 
