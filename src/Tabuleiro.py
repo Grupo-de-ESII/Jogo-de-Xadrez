@@ -59,7 +59,7 @@ class Tabuleiro:
         for i in range(8):
             for j in range(8):
                 if self.pecas[i][j] is not None:
-                    if(self.pecas[i][j].jogador==self.player1:
+                    if(self.pecas[i][j].jogador==self.player1):
                         hash1[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash1 else hash1[self.pecas[i][j].tipo()]+1
                     else:
                         hash2[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash2 else hash2[self.pecas[i][j].tipo()]+1
