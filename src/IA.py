@@ -25,53 +25,50 @@ class IA:
 		jogadas = self.get_jogadas_possiveis(maximizando_player1)
 
 		melhor_jogada = None
-		if maximizando_player1:
+		if not maximizando_player1:
 			melhor_valor = -sys.maxsize - 1  # Menor inteiro
 
 			for jogada in jogadas:
 				self.joga_jogada(jogada)
-				valor_jogada = self.minimax(profundidade - 1, maximizando_player1)
+				valor_jogada = self.minimax(profundidade - 1, not maximizando_player1)
+				self.desfaz_jogada()
 
 				if valor_jogada > melhor_valor:
 					melhor_valor = valor_jogada
 					melhor_jogada = jogada
-
-				self.desfaz_jogada()
 		else:
-			melhor_valor = sys.maxsize
+			melhor_valor = sys.maxsize  # Maior inteiro
 
 			for jogada in jogadas:
 				self.joga_jogada(jogada)
-				valor_jogada = self.minimax(profundidade - 1, maximizando_player1)
+				valor_jogada = self.minimax(profundidade - 1, not maximizando_player1)
+				self.desfaz_jogada()
 
 				if valor_jogada < melhor_valor:
 					melhor_valor = valor_jogada
 					melhor_jogada = jogada
-
-				self.desfaz_jogada()
 
 		return melhor_jogada
 
 	def minimax(self, profundidade, maximizando_player1):
 		# Limite da profundidade atingido
 		if profundidade == 0:  # TODO: Ou jogada é final
-			return self.avalia_tabuleiro(maximizando_player1)
+			return -self.avalia_tabuleiro()
 
 		jogadas = self.get_jogadas_possiveis(maximizando_player1)
 		if maximizando_player1:
-			melhor_valor = -sys.maxsize - 1  # Menor inteiro
-
-			for jogada in jogadas:
-				self.joga_jogada(jogada)
-				melhor_valor = max(melhor_valor, self.minimax(profundidade - 1, not maximizando_player1))
-				self.desfaz_jogada()
-
-		else:
 			melhor_valor = sys.maxsize  # Maior inteiro
 
 			for jogada in jogadas:
 				self.joga_jogada(jogada)
 				melhor_valor = min(melhor_valor, self.minimax(profundidade - 1, not maximizando_player1))
+				self.desfaz_jogada()
+		else:
+			melhor_valor = -sys.maxsize - 1  # Menor inteiro
+
+			for jogada in jogadas:
+				self.joga_jogada(jogada)
+				melhor_valor = max(melhor_valor, self.minimax(profundidade - 1, not maximizando_player1))
 				self.desfaz_jogada()
 
 		return melhor_valor
@@ -88,15 +85,7 @@ class IA:
 
 		return jogadas_jogador
 
-	def avalia_tabuleiro(self, maximizando_player1):
-		valor_heuristica = self.heuristica_simples()
-		
-		if maximizando_player1:
-			return valor_heuristica
-		else:
-			return -valor_heuristica
-
-	def heuristica_simples(self):
+	def avalia_tabuleiro(self):
 		somatorio = 0
 		for i in range(8):
 			for j in range(8):
