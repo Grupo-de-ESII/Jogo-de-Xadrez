@@ -17,6 +17,7 @@ A princípio, os commits serão livres, sem precisar de aprovação, mas para qu
 - Mensagens em português, curtas e simples, de preferência até 50 caracteres (recomendação do GitHub).
 - Incluam o tempo gasto na tarefa no fim da mensagem de commit sempre que possível. Vamos precisar disso mais tarde. Ex.: "... (40 min)"
 
-
-##### Branches
-- A princípio, não usaremos branches na organização do trabalho em seu fluxo principal. Quem quiser pode ficar à vontade para usar uma branch se quiser testar alguma ideia nova ou mudar algo drástico sem colocar isso na master.
+### Como instalar
+-Instale o pip3 no seu computador
+-Execute o comando 'pip3 install pygame'
+-Execute o comando 'python3 IU.py'
