@@ -35,6 +35,7 @@ class Tabuleiro:
         self.pecas[5][7] = Bispo(self.player2)
         self.pecas[6][7] = Cavalo(self.player2)
         self.pecas[7][7] = Torre(self.player2)
+        self.contadorRodadas=0
 
     def possiveisMovimentos(self):
         l = []
@@ -42,7 +43,31 @@ class Tabuleiro:
             for j in range(8):
                 l=l+self.pecaPossiveisMovimentos((i,j))
         return l
-
+    
+    #baseado em http://soxadrez.com.br/conteudos/fases_partida/
+    def empate(self,vezDe):
+        return self.afogamento(vezDe) or self.tresPosicoes() or self.cinquentaMovimentos() or self.insuficienciaMaterial()
+    def afogamento(self,vezDe):
+        return self.jogadorPossiveisMovimentos(vezDe) == []
+    def tresPosicoes(self):
+        return False
+    def cinquentaMovimentos(self):
+        return self.contadorRodadas >= 50
+    def insuficienciaMaterial(self):
+        hash1={}
+        hash2={}
+        for i in range(8):
+            for j in range(8):
+                if self.pecas[i][j] is not None:
+                    if(self.pecas[i][j].jogador==self.player1):
+                        hash1[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash1 else hash1[self.pecas[i][j].tipo()]+1
+                    else:
+                        hash2[self.pecas[i][j].tipo()]=0 if self.pecas[i][j].tipo() not in hash2 else hash2[self.pecas[i][j].tipo()]+1
+        l1=hash1.keys()
+        l2=hash2.keys()
+        p1Suficiente=('rei' in l1 and 'rainha' in l1) or ('rei' in l1 and 'torre' in l1) or ('rei' in l1 and 'bispo' in l1 and 'cavalo' in l1) or ('rei' in l1 and 'bispo' in l1 and hash1['bispo'] == 2)
+        p2Suficiente=('rei' in l2 and 'rainha' in l2) or ('rei' in l2 and 'torre' in l2) or ('rei' in l2 and 'bispo' in l2 and 'cavalo' in l2) or ('rei' in l2 and 'bispo' in l2 and hash2['bispo'] == 2)
+        return not (p1Suficiente or p2Suficiente)
     def xequeMate(self, cor):
         #BRANCAS = 1 ; PRETAS = 2
         return self.jogadorPossiveisMovimentos(Jogador('branca' if cor==1 else 'preta'))==[]
@@ -122,17 +147,19 @@ class Tabuleiro:
         (xf, yf) = posicao2
         tmp = self.pecas[xi][yi]
         self.pecas[xi][yi] = None
+        backup=self.pecas[xf][yf]
         self.pecas[xf][yf] = tmp
         if(self.pecas[xf][yf].tipo() == 'peao'):
             self.pecas[xf][yf].primeiroMovimento=False
         elif(self.pecas[xf][yf].tipo() == 'rei'):
             self.pecas[xf][yf].jaMeMovi=True
             self.posicaoReis[self.pecas[xf][yf].jogador]=(xf,yf)
-#            print("posicao dos Reis (chaves) : " + str(self.posicaoReis.keys()))
-            
+        if self.pecas[xf][yf].tipo() == 'peao' or backup is not None:
+            self.contadorRodadas=-1 #quando incrementar ali embaixo vira 0
+        self.contadorRodadas=self.contadorRodadas+1
 
     def falsoMovimento(self, posicao1, posicao2):
-        self.pilha.append((self.pecas,self.posicaoReis))
+        self.pilha.append((self.pecas,self.posicaoReis,self.contadorRodadas))
         self.pecas=deepcopy(self.pecas)
         self.posicaoReis={}
         for i in range(8):
@@ -142,7 +169,7 @@ class Tabuleiro:
         self.move(posicao1, posicao2)
 
     def reset(self):
-        (self.pecas,self.posicaoReis) = self.pilha[-1]
+        (self.pecas,self.posicaoReis,self.contadorRodadas) = self.pilha[-1]
         self.pilha = self.pilha[0:-1]
 
     def __str__(self):

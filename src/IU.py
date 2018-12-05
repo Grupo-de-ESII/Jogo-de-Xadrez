@@ -59,6 +59,7 @@ TELA_JOGO2 = 5;
 MOVIMENTO_JOGADOR = 6;
 TELA_FIM = 7;
 TELA_VERIFICACAO = 8;
+TELA_FIM2 = 9;
 
 #imagens de fundo
 imagem_menu1 = pygame.image.load("Ativos/menu_tela1.jpg")
@@ -528,6 +529,14 @@ def interface():
                     limpa_jogo()
                     estado = TELA_INICIO
 
+            if estado == TELA_FIM2:
+                mensagem = "EMPATOU"
+                desenha_tabuleiro(tela, TELA_FIM, mensagem)
+                #jogo_terminado(tela, )
+                if event.type == pygame.MOUSEBUTTONUP:
+                    limpa_jogo()
+                    estado = TELA_INICIO
+
             if estado == MOVIMENTO_JOGADOR:
                 global blocosVerdes
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -593,10 +602,14 @@ def interface():
                     print("JOGO ACABOU 1 GANHOU")
                     #terminaJogo Jogador 1 venceu
                     estado = TELA_FIM
+                elif TURNO == jogador2 and tab.empate(tab.player2):
+                    estado = TELA_FIM2
                 elif TURNO == jogador1 and tab.xequeMate(jogador1):
                     print("JOGO ACABOU 2 GANHOU")
                     #terminaJogo Jogador 2 venceu
                     estado = TELA_FIM
+                elif TURNO == jogador1 and tab.empate(tab.player1):
+                    estado = TELA_FIM2
                 elif VS_IA:
                     estado = TELA_JOGO2
                 else:
