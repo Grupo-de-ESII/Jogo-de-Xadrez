@@ -18,6 +18,6 @@ A princípio, os commits serão livres, sem precisar de aprovação, mas para qu
 - Incluam o tempo gasto na tarefa no fim da mensagem de commit sempre que possível. Vamos precisar disso mais tarde. Ex.: "... (40 min)"
 
 ### Como instalar
--Instale o pip3 no seu computador
--Execute o comando 'pip3 install pygame'
--Execute o comando 'python3 IU.py'
+- Instale o pip3 no seu computador.
+- Execute o comando 'pip3 install pygame'.
+- Execute o comando 'python3 IU.py'.
