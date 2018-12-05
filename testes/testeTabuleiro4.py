@@ -1,3 +1,6 @@
+from sys import *
+path.append("../src/")
+
 from Tabuleiro import *
 t=Tabuleiro()
 #brancas

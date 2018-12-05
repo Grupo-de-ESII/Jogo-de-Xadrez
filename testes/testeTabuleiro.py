@@ -1,3 +1,7 @@
+from sys import *
+
+path.append("../src/")
+
 from Tabuleiro import *
 
 tab=Tabuleiro()

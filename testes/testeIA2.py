@@ -1,3 +1,6 @@
+from sys import *
+path.append("../src/")
+
 from IA import *
 from Tabuleiro import *
 
