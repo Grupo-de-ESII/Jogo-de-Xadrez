@@ -753,7 +753,7 @@ def interface():
 
             if estado == TELA_INICIO:
                 if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONUP or key[pygame.K_v]:
-                    #eletricidade(LARGURA, ALTURA, tela)
+                    eletricidade(LARGURA, ALTURA, tela)
                     tab=Tabuleiro()
                     computador=IA(tab)
                     estado = TELA_MENU

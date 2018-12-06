@@ -1,0 +1,2 @@
+cd exec
+Xadrez.exe
